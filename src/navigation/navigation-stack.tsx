@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 //import { createNativeStackNavigator } from 'react-native-screens/native-stack';
-import LoginScreen from '../screens/login.screen';
+import LoginScreen from '../screens/login/login.screen';
 import TabBar from './tab-bar';
 
 //const AppStackNav = createNativeStackNavigator();

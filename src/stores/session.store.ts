@@ -36,6 +36,10 @@ class SessionStore {
     return AsyncStorage.getItem('token');
   }
 
+  setLoggedIn(loggedIn: boolean) {
+    this.isLoggedIn = loggedIn;
+  }
+
   logout() {
     //this.user = emptyUser;
     this.admin = false;

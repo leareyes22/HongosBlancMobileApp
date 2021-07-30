@@ -1,16 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import {
-  Box,
-  Button,
-  FormControl,
-  Heading,
-  Image,
-  Input,
-  VStack,
-} from 'native-base';
-import SessionStore from '../stores/session.store';
-const logo = require('../assets/Logo-HongosBlanc.png');
+import { Box, Button, FormControl, Image, Input, VStack } from 'native-base';
+import SessionStore from '../../stores/session.store';
+const logo = require('../../assets/Logo-HongosBlanc.png');
 
 const LoginScreen = () => {
   return (
@@ -19,9 +11,6 @@ const LoginScreen = () => {
         <Image alt="Alternate Text" source={logo} size="2xl" />
       </Box>
       <VStack space={2} mt={5}>
-        <Heading size="lg" color="primary.800">
-          Hongos Blanc
-        </Heading>
         <FormControl>
           <FormControl.Label
             _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
@@ -42,7 +31,7 @@ const LoginScreen = () => {
             _text={{ color: 'white' }}
             // eslint-disable-next-line react/jsx-no-bind
             onPress={() => {
-              SessionStore.isLoggedIn = true;
+              SessionStore.setLoggedIn(true);
             }}>
             Iniciar sesión
           </Button>
