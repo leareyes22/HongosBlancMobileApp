@@ -9,13 +9,13 @@
  */
 
 import React from 'react';
+import { observer } from 'mobx-react-lite';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import LoginScreen from './screens/login.screen';
+import RootStack from './src/navigation/navigation-stack';
 import { extendTheme, NativeBaseProvider } from 'native-base';
-
-const Stack = createStackNavigator();
+import SessionStore from './src/stores/session.store';
+import StatusBar from './src/components/status/status-bar.component';
 
 const App = () => {
   const theme = extendTheme({
@@ -46,16 +46,12 @@ const App = () => {
 
   return (
     <NativeBaseProvider theme={theme}>
+      <StatusBar />
       <NavigationContainer>
-        <Stack.Navigator headerMode="none">
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-          />
-        </Stack.Navigator>
+        <RootStack isLoggedIn={SessionStore.isLoggedIn} />
       </NavigationContainer>
     </NativeBaseProvider>
   );
 };
 
-export default App;
+export default observer(App);

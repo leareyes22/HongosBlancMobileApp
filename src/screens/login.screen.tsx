@@ -9,6 +9,7 @@ import {
   Input,
   VStack,
 } from 'native-base';
+import SessionStore from '../stores/session.store';
 const logo = require('../assets/Logo-HongosBlanc.png');
 
 const LoginScreen = () => {
@@ -36,7 +37,13 @@ const LoginScreen = () => {
           <Input type="password" borderColor="primary.900" />
         </FormControl>
         <VStack space={2}>
-          <Button bg="primary.900" _text={{ color: 'white' }}>
+          <Button
+            bg="primary.900"
+            _text={{ color: 'white' }}
+            // eslint-disable-next-line react/jsx-no-bind
+            onPress={() => {
+              SessionStore.isLoggedIn = true;
+            }}>
             Iniciar sesión
           </Button>
         </VStack>
