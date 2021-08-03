@@ -6,7 +6,7 @@ const StatusBar = () => {
   return (
     <HStack
       shadow={9}
-      bg="primary.600"
+      bg="primary.700"
       px={1}
       py={3}
       justifyContent="space-between"

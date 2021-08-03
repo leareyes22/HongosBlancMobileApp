@@ -1,10 +1,10 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SeleccionSalaScreen from '../screens/control/seleccion-sala.screen';
 import CosechaScreen from '../screens/cosecha/cosecha.screen';
 import ReportesScreen from '../screens/reportes/reportes.screen';
 import TareasScreen from '../screens/tareas/tareas.screen';
+import ControlNavigationStack from '../screens/control/control-navigation-stack';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -47,7 +47,7 @@ function TabBar() {
       />
       <Tab.Screen
         name="Control"
-        component={SeleccionSalaScreen}
+        component={ControlNavigationStack}
         options={{
           tabBarLabel: 'Control',
           // eslint-disable-next-line react/display-name

@@ -13,7 +13,7 @@ import {
 } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const SeleccionSalaScreen = () => {
+const SeleccionSalaScreen = ({ navigation }: any) => {
   const [value, setValue] = useState('');
 
   return (
@@ -107,11 +107,12 @@ const SeleccionSalaScreen = () => {
             />
           }
           flex={1}
+          // eslint-disable-next-line react/jsx-no-bind
+          onPress={() => navigation.goBack()}
         />
         <IconButton
           bg="primary.800"
           variant="solid"
-          disabled
           icon={
             <MaterialCommunityIcons
               name="arrow-right"
@@ -120,7 +121,10 @@ const SeleccionSalaScreen = () => {
             />
           }
           flex={1}
-        />
+          // eslint-disable-next-line react/jsx-no-bind
+          onPress={() => navigation.navigate('Temperaturas')}>
+          Cargar Datos
+        </IconButton>
       </HStack>
     </Box>
   );
