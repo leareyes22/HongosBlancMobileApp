@@ -12,14 +12,13 @@ class LoginStore {
 
   async login(usuario: Usuario) {
     try {
-      const r = await API.post('/Account/Login', usuario);
+      const r = await API.post('/authentication/login', usuario);
       if (r.status === StatusCodes.OK) {
         SessionStore.setAuthenticationInfo(r.data);
       } else {
         SessionStore.setError(r.status);
       }
     } catch (e) {
-      console.log(e);
       SessionStore.setError(e.response.status);
     }
   }

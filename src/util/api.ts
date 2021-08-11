@@ -1,13 +1,11 @@
 import axios from 'axios';
 import _ from 'lodash';
 
-const API_HOST = process.env.RUNTIME_API_HOST
-  ? process.env.RUNTIME_API_HOST
-  : 'http://localhost:5001';
+const API_HOST = 'http://192.168.0.23:5001';
 const API_PREFIX = '/api';
 
 // urls without authentication bearer
-const whitelistUrls = ['/auth/login'];
+const whitelistUrls = ['/authentication/login'];
 
 /*axios.interceptors.request.use(async config => {
   if (

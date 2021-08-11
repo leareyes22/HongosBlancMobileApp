@@ -2,8 +2,8 @@ import { makeAutoObservable } from 'mobx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class SessionStore {
-  admin: boolean = false;
-
+  username: string = '';
+  role: string = '';
   isLoggedIn: boolean = false;
   loading: boolean = false;
   loginError: boolean = false;
@@ -19,9 +19,11 @@ class SessionStore {
 
   setAuthenticationInfo(info: any) {
     AsyncStorage.setItem('token', info.token);
-    AsyncStorage.setItem('admin', info.admin);
-    this.admin = info.admin;
-    if (this.admin !== null) {
+    AsyncStorage.setItem('username', info.username);
+    AsyncStorage.setItem('role', info.role);
+    this.username = info.username;
+    this.role = info.role;
+    if (this.username !== null && this.role !== null) {
       this.isLoggedIn = true;
     }
     this.loginError = false;
@@ -41,11 +43,12 @@ class SessionStore {
   }
 
   logout() {
-    //this.user = emptyUser;
-    this.admin = false;
+    this.username = '';
+    this.role = '';
     this.isLoggedIn = false;
     AsyncStorage.removeItem('token');
-    AsyncStorage.removeItem('admin');
+    AsyncStorage.removeItem('username');
+    AsyncStorage.removeItem('role');
   }
 }
 

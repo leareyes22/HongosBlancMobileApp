@@ -7,14 +7,16 @@ import {
   Heading,
   HStack,
   IconButton,
-  Input,
   Select,
+  Text,
   VStack,
 } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import SessionStore from '../../stores/session.store';
 
 const SeleccionSalaScreen = ({ navigation }: any) => {
-  const [value, setValue] = useState('');
+  const [sala, setSala] = useState('');
+  const [turno, setTurno] = useState('');
 
   return (
     <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">
@@ -22,35 +24,30 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
         <Heading size="lg" color="primary.800">
           Control
         </Heading>
-        <FormControl>
+        <Text
+          mb={2}
+          _dark={{
+            color: '#000000',
+            bold: true,
+          }}>
+          {'Usuario: ' + SessionStore.username}
+        </Text>
+        <FormControl mb={1}>
           <FormControl.Label
             _text={{
               color: '#000000',
-            }}>
-            Usuario
-          </FormControl.Label>
-          <Input
-            borderColor="primary.900"
-            _dark={{
-              color: '#000000',
-            }}
-          />
-        </FormControl>
-        <FormControl mb={5}>
-          <FormControl.Label
-            _text={{
-              color: '#000000',
+              bold: true,
             }}>
             Sala
           </FormControl.Label>
           <Select
             borderColor="primary.900"
-            selectedValue={value}
+            selectedValue={sala}
             minWidth={200}
             placeholder="Seleccione una sala"
             // eslint-disable-next-line react/jsx-no-bind
             onValueChange={itemValue => {
-              setValue(itemValue);
+              setSala(itemValue);
             }}
             _selectedItem={{
               bg: 'primary.700',
@@ -67,32 +64,41 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
           </Select>
         </FormControl>
         <FormControl mb={5}>
-          <FormControl.Label
-            _text={{
-              color: '#000000',
-            }}>
-            Estado de sala
-          </FormControl.Label>
-          <Input
-            borderColor="primary.900"
+          <Text
             _dark={{
               color: '#000000',
-            }}
-          />
+            }}>
+            {'Estado de sala: ' + 'Activa'}
+          </Text>
         </FormControl>
         <FormControl mb={5}>
           <FormControl.Label
             _text={{
               color: '#000000',
+              bold: true,
             }}>
-            Día de sala
+            Turno
           </FormControl.Label>
-          <Input
+          <Select
             borderColor="primary.900"
+            selectedValue={turno}
+            minWidth={200}
+            placeholder="Seleccione un turno"
+            // eslint-disable-next-line react/jsx-no-bind
+            onValueChange={itemValue => {
+              setTurno(itemValue);
+            }}
+            _selectedItem={{
+              bg: 'primary.700',
+              endIcon: <CheckIcon size={5} />,
+            }}
+            mt={1}
             _dark={{
               color: '#000000',
-            }}
-          />
+            }}>
+            <Select.Item label="Mañana" value="1" />
+            <Select.Item label="Tarde" value="2" />
+          </Select>
         </FormControl>
       </VStack>
       <HStack space={250}>
