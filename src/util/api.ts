@@ -20,6 +20,20 @@ axios.interceptors.request.use(async config => {
   return config;
 });
 
+axios.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    if (error.response) {
+      if (error.response.status === 401) {
+        SessionStore.logout();
+      }
+    }
+    throw error;
+  },
+);
+
 const API = {
   get: (endpoint: string, data?: any) => {
     if (_.isUndefined(data)) {
