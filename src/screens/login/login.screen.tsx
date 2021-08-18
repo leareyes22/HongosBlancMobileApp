@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Box, Button, FormControl, Image, Input, VStack } from 'native-base';
-import createLocalObservable from './login.state';
+import createLocalObservable from './state/login.state';
 const logo = require('../../assets/Logo-HongosBlanc.png');
 
 const LoginScreen = () => {

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import _ from 'lodash';
+import SessionStore from '../stores/session.store';
 
 const API_HOST = 'http://192.168.0.23:5001';
 const API_PREFIX = '/api';
@@ -7,17 +8,17 @@ const API_PREFIX = '/api';
 // urls without authentication bearer
 const whitelistUrls = ['/authentication/login'];
 
-/*axios.interceptors.request.use(async config => {
+axios.interceptors.request.use(async config => {
   if (
     !whitelistUrls.includes(config.url ? config.url : '') &&
     SessionStore.isLoggedIn
   ) {
     config.headers = {
-      Authorization: `Bearer ${SessionStore.getJwt()}`,
+      Authorization: `Bearer ${await SessionStore.getToken()}`,
     };
   }
   return config;
-});*/
+});
 
 const API = {
   get: (endpoint: string, data?: any) => {

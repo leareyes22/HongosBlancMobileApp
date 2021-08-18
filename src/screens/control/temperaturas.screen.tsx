@@ -3,112 +3,120 @@ import { observer } from 'mobx-react-lite';
 import {
   Box,
   Button,
-  Center,
   Heading,
   HStack,
   IconButton,
-  Input,
+  Text,
   VStack,
 } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import NumericInput from 'react-native-numeric-input';
+import SessionStore from '../../stores/session.store';
+import SalaStore from '../../stores/sala.store';
 
 const TemperaturasScreen = ({ navigation }: any) => {
   return (
     <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">
-      <HStack space={3} mx="auto" alignItems="center">
-        <Center
-          size={16}
-          bg="primary.200"
-          rounded="md"
-          _text={{
-            color: 'black',
-          }}
-          shadow={3}>
-          Usuario
-        </Center>
-        <Center
-          bg="primary.200"
-          size={16}
-          rounded="md"
-          _text={{
-            color: 'black',
-          }}
-          shadow={3}>
-          Sala
-        </Center>
-        <Center
-          size={16}
-          bg="primary.200"
-          rounded="md"
-          _text={{
-            color: 'black',
-          }}
-          shadow={3}>
-          Estado
-        </Center>
-      </HStack>
+      <VStack space={2}>
+        <Text
+          _dark={{
+            color: '#000000',
+          }}>
+          {'Usuario: ' + SessionStore.username}
+        </Text>
+        <Text
+          _dark={{
+            color: '#000000',
+          }}>
+          {'Sala: ' + SalaStore.sala.data.nombre}
+        </Text>
+        <Text
+          _dark={{
+            color: '#000000',
+          }}>
+          {'Estado: ' + SalaStore.sala.data.estado}
+        </Text>
+      </VStack>
       <VStack space={2} mt={5}>
         <Heading size="lg" color="primary.800">
           Temperaturas cama 1
         </Heading>
-        <HStack mx="auto" space={180}>
-          <Input
-            isRequired
-            width={100}
-            placeholder="1"
-            keyboardType="numeric"
-            _dark={{
-              color: '#000000',
-            }}
+        <HStack mx="auto" space={100}>
+          <NumericInput
+            //value={this.state.value}
+            onChange={value => console.log(value)}
+            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+            minValue={0.0}
+            step={0.1}
+            valueType="real"
+            rounded
+            textColor="black"
+            rightButtonBackgroundColor="#f59e0b"
+            leftButtonBackgroundColor="#d97706"
           />
-          <Input
-            isRequired
-            width={100}
-            placeholder="4"
-            keyboardType="numeric"
-            _dark={{
-              color: '#000000',
-            }}
-          />
-        </HStack>
-        <HStack mx="auto" space={180}>
-          <Input
-            isRequired
-            width={100}
-            placeholder="2"
-            keyboardType="numeric"
-            _dark={{
-              color: '#000000',
-            }}
-          />
-          <Input
-            isRequired
-            width={100}
-            placeholder="5"
-            keyboardType="numeric"
-            _dark={{
-              color: '#000000',
-            }}
+          <NumericInput
+            //value={this.state.value}
+            onChange={value => console.log(value)}
+            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+            minValue={0.0}
+            step={0.1}
+            valueType="real"
+            rounded
+            textColor="black"
+            rightButtonBackgroundColor="#f59e0b"
+            leftButtonBackgroundColor="#d97706"
           />
         </HStack>
-        <HStack mx="auto" space={180}>
-          <Input
-            isRequired
-            width={100}
-            placeholder="3"
-            keyboardType="numeric"
-            _dark={{
-              color: '#000000',
-            }}
+        <HStack mx="auto" space={100}>
+          <NumericInput
+            //value={this.state.value}
+            onChange={value => console.log(value)}
+            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+            minValue={0.0}
+            step={0.1}
+            valueType="real"
+            rounded
+            textColor="black"
+            rightButtonBackgroundColor="#f59e0b"
+            leftButtonBackgroundColor="#d97706"
           />
-          <Input
-            isRequired
-            width={100}
-            placeholder="6"
-            keyboardType="numeric"
-            _dark={{
-              color: '#000000',
-            }}
+          <NumericInput
+            //value={this.state.value}
+            onChange={value => console.log(value)}
+            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+            minValue={0.0}
+            step={0.1}
+            valueType="real"
+            rounded
+            textColor="black"
+            rightButtonBackgroundColor="#f59e0b"
+            leftButtonBackgroundColor="#d97706"
+          />
+        </HStack>
+        <HStack mx="auto" space={100}>
+          <NumericInput
+            //value={this.state.value}
+            onChange={value => console.log(value)}
+            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+            minValue={0.0}
+            step={0.1}
+            valueType="real"
+            rounded
+            textColor="black"
+            rightButtonBackgroundColor="#f59e0b"
+            leftButtonBackgroundColor="#d97706"
+          />
+          <NumericInput
+            //value={this.state.value}
+            onChange={value => console.log(value)}
+            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+            minValue={0.0}
+            step={0.1}
+            valueType="real"
+            rounded
+            textColor="black"
+            rightButtonBackgroundColor="#f59e0b"
+            leftButtonBackgroundColor="#d97706"
           />
         </HStack>
         <Button
@@ -119,7 +127,7 @@ const TemperaturasScreen = ({ navigation }: any) => {
           }>
           Tomar foto
         </Button>
-        <HStack space={250}>
+        <HStack ml={5} mr={5} space={150}>
           <IconButton
             bg="primary.800"
             variant="solid"
