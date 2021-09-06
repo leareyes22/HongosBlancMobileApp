@@ -17,6 +17,7 @@ import SalaStore from '../../stores/sala.store';
 import TurnoStore from '../../stores/turno.store';
 // eslint-disable-next-line no-unused-vars
 import { SalaDTO } from '../../models/sala';
+import ControlStore from '../../stores/control.store';
 
 const SeleccionSalaScreen = ({ navigation }: any) => {
   const [sala, setSala] = useState('');
@@ -29,11 +30,13 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
   function handleSalaSelect(itemValue: any) {
     setSala(itemValue);
     SalaStore.getSalaFromAPI(itemValue);
+    ControlStore.setSala(itemValue);
   }
 
   function handleTurnoSelect(itemValue: any) {
     setTurno(itemValue);
     TurnoStore.getTurnoFromAPI(itemValue);
+    ControlStore.setTurno(itemValue);
   }
 
   return (
@@ -152,9 +155,13 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
               size={26}
             />
           }
+          disabled={sala === '' || turno === ''}
           flex={1}
           // eslint-disable-next-line react/jsx-no-bind
-          onPress={() => navigation.navigate('Temperaturas')}>
+          onPress={() => {
+            ControlStore.setPersonal(1);
+            navigation.navigate('Temperaturas');
+          }}>
           Cargar Datos
         </IconButton>
       </HStack>
