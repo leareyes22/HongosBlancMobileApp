@@ -4,6 +4,8 @@ import ControlStore from '../../../stores/control.store';
 const createLocalObservable = () => ({
   control: emptyCreateControlDTO,
 
+  submitted: false,
+
   tempAireHandler(tempAire: number) {
     this.control.temperatura_aire = tempAire;
     ControlStore.setTempAire(tempAire);
@@ -20,11 +22,15 @@ const createLocalObservable = () => ({
     this.control.observaciones = observaciones;
     ControlStore.setObservaciones(observaciones);
   },
+  setSubmitted(submitted: boolean) {
+    this.submitted = submitted;
+  },
   submitHandler() {
     ControlStore.createControl({
       ...ControlStore.control.data,
       fecha_control: new Date(),
     });
+    this.setSubmitted(true);
   },
 });
 

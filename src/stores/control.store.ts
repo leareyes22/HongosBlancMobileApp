@@ -12,6 +12,8 @@ class ControlStore {
   control: UIWrapper<CreateControlDTO> = initialUIWrapper(
     emptyCreateControlDTO,
   );
+  controlImage: string = '';
+  controlImages: Array<any> = [];
   controlList: UIWrapper<Array<CreateControlDTO>> = initialUIWrapper([]);
 
   constructor() {
@@ -20,17 +22,62 @@ class ControlStore {
 
   async createControl(control: CreateControlDTO) {
     this.setControlWrapper(this.setLoading(this.control));
-    console.log(control);
     try {
       const r = await API.post(`/control`, control);
       if (r.status === StatusCodes.OK) {
-        this.setControl(control);
+        this.uploadControlImages(r.data.id_control);
       } else {
         this.setControlWrapper(this.setError(this.control, r.status));
       }
     } catch (e) {
       this.setControlWrapper(this.setError(this.control, e.response.status));
     }
+  }
+
+  async uploadControlImages(controlId: number) {
+    this.setControlWrapper(this.setLoading(this.control));
+    this.controlImages.forEach(async item => {
+      let data = new FormData();
+      data.append('image', item);
+      try {
+        const r = await API.post(`/control/image/${controlId}`, data);
+        if (r.status === StatusCodes.OK) {
+          this.setControlWrapper(this.unsetLoading(this.control));
+        } else {
+          this.setControlWrapper(this.setError(this.control, r.status));
+        }
+      } catch (e) {
+        this.setControlWrapper(this.setError(this.control, e.response.status));
+      }
+    });
+  }
+
+  async getControlImage(id: number) {
+    this.setControlWrapper(this.setLoading(this.control));
+    try {
+      const r = await API.get(`/control/image/${id}`);
+      if (r.status === StatusCodes.OK) {
+        console.log(r.data);
+        this.setControlImage(r.data);
+      } else {
+        this.setControlWrapper(this.setError(this.control, r.status));
+      }
+    } catch (e) {
+      this.setControlWrapper(this.setError(this.control, e.response.status));
+    }
+  }
+
+  pushControlImage(data: any, nroCamaActual: number) {
+    this.controlImages.push({
+      uri: data.uri,
+      name: 'picture-cama-' + nroCamaActual + '.jpg',
+      type: 'image/jpg',
+    });
+    this.controlImage = data.uri;
+  }
+
+  setControlImage(imageUri: string) {
+    this.controlImage = imageUri;
   }
 
   setControl(control: CreateControlDTO) {
@@ -97,6 +144,17 @@ class ControlStore {
     return {
       ...property,
       loading: true,
+      hasData: false,
+      hasError: false,
+      errorMessage: undefined,
+      errorCode: undefined,
+    };
+  }
+
+  unsetLoading(property: UIWrapper<any>) {
+    return {
+      ...property,
+      loading: false,
       hasData: false,
       hasError: false,
       errorMessage: undefined,

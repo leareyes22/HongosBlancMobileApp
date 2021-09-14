@@ -9,8 +9,7 @@ const CameraModal = (props: any) => {
   const takePicture = async function (camera: any) {
     const options = { quality: 0.5, base64: true };
     const data = await camera.takePictureAsync(options);
-    //  eslint-disable-next-line
-    console.log(data.uri);
+    props.setFoto(data);
     props.setShowCam(false);
   };
 
@@ -30,6 +29,7 @@ const CameraModal = (props: any) => {
                 <Button
                   bg="primary.800"
                   mx="auto"
+                  // eslint-disable-next-line react/jsx-no-bind
                   onPress={() => takePicture(camera)}
                   startIcon={
                     <MaterialCommunityIcons

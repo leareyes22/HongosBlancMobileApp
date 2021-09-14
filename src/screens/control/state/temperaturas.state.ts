@@ -13,6 +13,8 @@ const createLocalObservable = () => ({
 
   showCam: false,
 
+  photoHasTaken: false,
+
   increaseNroCamaActual() {
     this.setNroCamaActual(this.nroCamaActual + 1);
     this.pushTemp(this.tempActual);
@@ -34,6 +36,10 @@ const createLocalObservable = () => ({
   setShowCam(showCam: boolean) {
     this.showCam = showCam;
     console.log(this.showCam);
+  },
+  async setFoto(data: any) {
+    ControlStore.pushControlImage(data, this.nroCamaActual);
+    this.photoHasTaken = true;
   },
   t1Handler(value: number) {
     this.tempActual.t1 = value;

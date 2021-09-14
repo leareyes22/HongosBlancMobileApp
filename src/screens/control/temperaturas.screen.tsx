@@ -1,11 +1,12 @@
 import React from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import {
-  Box,
   Button,
   Heading,
   HStack,
   IconButton,
+  Image,
+  ScrollView,
   Text,
   VStack,
 } from 'native-base';
@@ -15,6 +16,7 @@ import SessionStore from '../../stores/session.store';
 import SalaStore from '../../stores/sala.store';
 import createLocalObservable from './state/temperaturas.state';
 import CameraModal from '../../components/camera/camera-modal.component';
+import ControlStore from '../../stores/control.store';
 
 const TemperaturasScreen = ({ navigation }: any) => {
   const localObservable = useLocalObservable(createLocalObservable);
@@ -28,7 +30,7 @@ const TemperaturasScreen = ({ navigation }: any) => {
     localObservable.tempActual.t6 === 0.0;
 
   return (
-    <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">
+    <ScrollView flex={1} p={2} w="100%" mx="auto" bg="primary.100">
       <VStack space={2}>
         <Text
           _dark={{
@@ -55,10 +57,11 @@ const TemperaturasScreen = ({ navigation }: any) => {
         </Heading>
         <HStack mx="auto" space={100}>
           <NumericInput
+            initValue={localObservable.tempActual.t1}
             value={localObservable.tempActual.t1}
             onChange={localObservable.t1Handler}
-            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-            minValue={0.0}
+            minValue={17.0}
+            maxValue={27.0}
             step={0.1}
             valueType="real"
             rounded
@@ -67,10 +70,11 @@ const TemperaturasScreen = ({ navigation }: any) => {
             leftButtonBackgroundColor="#d97706"
           />
           <NumericInput
+            initValue={localObservable.tempActual.t2}
             value={localObservable.tempActual.t2}
             onChange={localObservable.t2Handler}
-            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-            minValue={0.0}
+            minValue={17.0}
+            maxValue={27.0}
             step={0.1}
             valueType="real"
             rounded
@@ -81,10 +85,11 @@ const TemperaturasScreen = ({ navigation }: any) => {
         </HStack>
         <HStack mx="auto" space={100}>
           <NumericInput
+            initValue={localObservable.tempActual.t3}
             value={localObservable.tempActual.t3}
             onChange={localObservable.t3Handler}
-            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-            minValue={0.0}
+            minValue={17.0}
+            maxValue={27.0}
             step={0.1}
             valueType="real"
             rounded
@@ -93,10 +98,11 @@ const TemperaturasScreen = ({ navigation }: any) => {
             leftButtonBackgroundColor="#d97706"
           />
           <NumericInput
+            initValue={localObservable.tempActual.t4}
             value={localObservable.tempActual.t4}
             onChange={localObservable.t4Handler}
-            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-            minValue={0.0}
+            minValue={17.0}
+            maxValue={27.0}
             step={0.1}
             valueType="real"
             rounded
@@ -107,10 +113,11 @@ const TemperaturasScreen = ({ navigation }: any) => {
         </HStack>
         <HStack mx="auto" space={100}>
           <NumericInput
+            initValue={localObservable.tempActual.t5}
             value={localObservable.tempActual.t5}
             onChange={localObservable.t5Handler}
-            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-            minValue={0.0}
+            minValue={17.0}
+            maxValue={27.0}
             step={0.1}
             valueType="real"
             rounded
@@ -119,10 +126,11 @@ const TemperaturasScreen = ({ navigation }: any) => {
             leftButtonBackgroundColor="#d97706"
           />
           <NumericInput
+            initValue={localObservable.tempActual.t6}
             value={localObservable.tempActual.t6}
             onChange={localObservable.t6Handler}
-            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-            minValue={0.0}
+            minValue={17.0}
+            maxValue={27.0}
             step={0.1}
             valueType="real"
             rounded
@@ -134,7 +142,9 @@ const TemperaturasScreen = ({ navigation }: any) => {
         <Button
           bg="primary.800"
           mx="auto"
+          // eslint-disable-next-line react/jsx-no-bind
           onPress={() => localObservable.setShowCam(true)}
+          disabled={localObservable.photoHasTaken}
           startIcon={
             <MaterialCommunityIcons name="camera" color={'#000000'} size={26} />
           }>
@@ -143,7 +153,17 @@ const TemperaturasScreen = ({ navigation }: any) => {
         <CameraModal
           showCam={localObservable.showCam}
           setShowCam={localObservable.setShowCam}
+          setFoto={localObservable.setFoto}
         />
+        <VStack space={2} alignItems="center" safeAreaTop my={6}>
+          <Image
+            source={{
+              uri: ControlStore.controlImage,
+            }}
+            alt="Alternate Text"
+            size={'xl'}
+          />
+        </VStack>
         <HStack ml={5} mr={5} space={150}>
           <IconButton
             bg="primary.800"
@@ -173,7 +193,7 @@ const TemperaturasScreen = ({ navigation }: any) => {
             flex={1}
             // eslint-disable-next-line react/jsx-no-bind
             onPress={() => {
-              if (localObservable.nroCamaActual === 1) {
+              if (localObservable.nroCamaActual === 2) {
                 localObservable.pushTemp(localObservable.tempActual);
                 localObservable.saveTemperaturas();
                 navigation.navigate('CargarDatos');
@@ -184,7 +204,7 @@ const TemperaturasScreen = ({ navigation }: any) => {
           />
         </HStack>
       </VStack>
-    </Box>
+    </ScrollView>
   );
 };
 

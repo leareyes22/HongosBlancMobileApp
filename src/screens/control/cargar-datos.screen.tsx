@@ -1,21 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import {
+  Alert,
   Box,
   Button,
   FormControl,
   Heading,
   HStack,
   IconButton,
+  Spinner,
   TextArea,
   VStack,
 } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import NumericInput from 'react-native-numeric-input';
 import createLocalObservable from './state/cargar-datos.state';
+import ControlStore from '../../stores/control.store';
 
 const CargarDatosScreen = ({ navigation }: any) => {
   const localObservable = useLocalObservable(createLocalObservable);
+
+  useEffect(() => {}, [
+    ControlStore.control.loading,
+    ControlStore.control.hasError,
+  ]);
 
   return (
     <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">
@@ -23,7 +31,10 @@ const CargarDatosScreen = ({ navigation }: any) => {
         <Heading size="lg" color="primary.800">
           Cargar Datos
         </Heading>
-        <FormControl mb={1}>
+        <FormControl
+          mb={1}
+          isRequired
+          isInvalid={localObservable.control.temperatura_aire === 0}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -32,12 +43,12 @@ const CargarDatosScreen = ({ navigation }: any) => {
             Temperatura del Aire
           </FormControl.Label>
           <NumericInput
-            //value={localObservable.tempActual.t1}
+            value={localObservable.control.temperatura_aire}
             totalWidth={240}
             totalHeight={50}
             onChange={localObservable.tempAireHandler}
-            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-            minValue={0.0}
+            minValue={17.0}
+            maxValue={27.0}
             step={0.1}
             valueType="real"
             rounded
@@ -49,7 +60,10 @@ const CargarDatosScreen = ({ navigation }: any) => {
             Debe ingresar un valor.
           </FormControl.ErrorMessage>
         </FormControl>
-        <FormControl mb={1}>
+        <FormControl
+          mb={1}
+          isRequired
+          isInvalid={localObservable.control.humedad_relativa === 0}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -58,11 +72,10 @@ const CargarDatosScreen = ({ navigation }: any) => {
             Humedad Relativa
           </FormControl.Label>
           <NumericInput
-            //value={localObservable.tempActual.t1}
+            value={localObservable.control.humedad_relativa}
             totalWidth={240}
             totalHeight={50}
             onChange={localObservable.humRelativaHandler}
-            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
             minValue={0.0}
             step={0.1}
             valueType="real"
@@ -75,7 +88,10 @@ const CargarDatosScreen = ({ navigation }: any) => {
             Debe ingresar un valor.
           </FormControl.ErrorMessage>
         </FormControl>
-        <FormControl mb={1}>
+        <FormControl
+          mb={1}
+          isRequired
+          isInvalid={localObservable.control.co2 === 0}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -84,11 +100,10 @@ const CargarDatosScreen = ({ navigation }: any) => {
             Porcentaje de CO2
           </FormControl.Label>
           <NumericInput
-            //value={localObservable.tempActual.t1}
+            value={localObservable.control.co2}
             totalWidth={240}
             totalHeight={50}
             onChange={localObservable.porcentajeCO2Handler}
-            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
             minValue={0.0}
             step={0.1}
             valueType="real"
@@ -101,7 +116,10 @@ const CargarDatosScreen = ({ navigation }: any) => {
             Debe ingresar un valor.
           </FormControl.ErrorMessage>
         </FormControl>
-        <FormControl mb={1}>
+        <FormControl
+          mb={1}
+          isRequired
+          isInvalid={localObservable.control.observaciones === ''}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -110,7 +128,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
             Observaciones
           </FormControl.Label>
           <TextArea
-            //onChangeText={localObservable.setUsername}
+            defaultValue="N/A."
             borderColor="primary.900"
             _dark={{
               color: '#000000',
@@ -120,6 +138,9 @@ const CargarDatosScreen = ({ navigation }: any) => {
             maxLength={250}
           />
         </FormControl>
+        <LoadingMessage submitted={localObservable.submitted} />
+        <SuccessMessage submitted={localObservable.submitted} />
+        <ErrorMessage submitted={localObservable.submitted} />
         <HStack space={120}>
           <IconButton
             bg="primary.800"
@@ -144,13 +165,57 @@ const CargarDatosScreen = ({ navigation }: any) => {
                 size={26}
               />
             }
+            disabled={localObservable.submitted}
             onPress={localObservable.submitHandler}
-            flex={1}>
+            flex={2}>
             Cargar datos
           </Button>
         </HStack>
       </VStack>
     </Box>
+  );
+};
+
+const LoadingMessage = (props: any) => {
+  const shouldRender = props.submitted && ControlStore.control.loading;
+  if (!shouldRender) {
+    return null;
+  }
+  return (
+    <HStack space={2}>
+      <Heading color="primary.600">Cargando control...</Heading>
+      <Spinner color="primary.600" />
+    </HStack>
+  );
+};
+
+const SuccessMessage = (props: any) => {
+  const shouldRender = props.submitted && !ControlStore.control.hasError;
+  if (!shouldRender) {
+    return null;
+  }
+  return (
+    <Alert status={'success'} w="100%">
+      <Alert.Icon />
+      <Alert.Title flexShrink={1}>
+        El control se ha cargado exitosamente.
+      </Alert.Title>
+    </Alert>
+  );
+};
+
+const ErrorMessage = (props: any) => {
+  const shouldRender = props.submitted && ControlStore.control.hasError;
+  if (!shouldRender) {
+    return null;
+  }
+  return (
+    <Alert status={'error'} w="100%">
+      <Alert.Icon />
+      <Alert.Title flexShrink={1}>
+        Ha ocurrido un error. Contacte a soporte.
+      </Alert.Title>
+    </Alert>
   );
 };
 
