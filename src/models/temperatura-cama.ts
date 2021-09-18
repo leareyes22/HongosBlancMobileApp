@@ -10,10 +10,10 @@ export default interface TemperaturaCamaDTO {
 
 export const emptyTemperaturaCamaDTO: TemperaturaCamaDTO = {
   nro_cama: 1,
-  t1: 0.0,
-  t2: 0.0,
-  t3: 0.0,
-  t4: 0.0,
-  t5: 0.0,
-  t6: 0.0,
+  t1: 17.0,
+  t2: 17.0,
+  t3: 17.0,
+  t4: 17.0,
+  t5: 17.0,
+  t6: 17.0,
 };

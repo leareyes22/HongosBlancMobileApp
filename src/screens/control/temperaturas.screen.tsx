@@ -2,6 +2,7 @@ import React from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import {
   Button,
+  FormControl,
   Heading,
   HStack,
   IconButton,
@@ -55,90 +56,101 @@ const TemperaturasScreen = ({ navigation }: any) => {
         <Heading size="lg" color="primary.800">
           {'Temperaturas cama ' + localObservable.nroCamaActual}
         </Heading>
-        <HStack mx="auto" space={100}>
-          <NumericInput
-            initValue={localObservable.tempActual.t1}
-            value={localObservable.tempActual.t1}
-            onChange={localObservable.t1Handler}
-            minValue={17.0}
-            maxValue={27.0}
-            step={0.1}
-            valueType="real"
-            rounded
-            textColor="black"
-            rightButtonBackgroundColor="#f59e0b"
-            leftButtonBackgroundColor="#d97706"
-          />
-          <NumericInput
-            initValue={localObservable.tempActual.t2}
-            value={localObservable.tempActual.t2}
-            onChange={localObservable.t2Handler}
-            minValue={17.0}
-            maxValue={27.0}
-            step={0.1}
-            valueType="real"
-            rounded
-            textColor="black"
-            rightButtonBackgroundColor="#f59e0b"
-            leftButtonBackgroundColor="#d97706"
-          />
-        </HStack>
-        <HStack mx="auto" space={100}>
-          <NumericInput
-            initValue={localObservable.tempActual.t3}
-            value={localObservable.tempActual.t3}
-            onChange={localObservable.t3Handler}
-            minValue={17.0}
-            maxValue={27.0}
-            step={0.1}
-            valueType="real"
-            rounded
-            textColor="black"
-            rightButtonBackgroundColor="#f59e0b"
-            leftButtonBackgroundColor="#d97706"
-          />
-          <NumericInput
-            initValue={localObservable.tempActual.t4}
-            value={localObservable.tempActual.t4}
-            onChange={localObservable.t4Handler}
-            minValue={17.0}
-            maxValue={27.0}
-            step={0.1}
-            valueType="real"
-            rounded
-            textColor="black"
-            rightButtonBackgroundColor="#f59e0b"
-            leftButtonBackgroundColor="#d97706"
-          />
-        </HStack>
-        <HStack mx="auto" space={100}>
-          <NumericInput
-            initValue={localObservable.tempActual.t5}
-            value={localObservable.tempActual.t5}
-            onChange={localObservable.t5Handler}
-            minValue={17.0}
-            maxValue={27.0}
-            step={0.1}
-            valueType="real"
-            rounded
-            textColor="black"
-            rightButtonBackgroundColor="#f59e0b"
-            leftButtonBackgroundColor="#d97706"
-          />
-          <NumericInput
-            initValue={localObservable.tempActual.t6}
-            value={localObservable.tempActual.t6}
-            onChange={localObservable.t6Handler}
-            minValue={17.0}
-            maxValue={27.0}
-            step={0.1}
-            valueType="real"
-            rounded
-            textColor="black"
-            rightButtonBackgroundColor="#f59e0b"
-            leftButtonBackgroundColor="#d97706"
-          />
-        </HStack>
+        <FormControl isInvalid={nextDisabled}>
+          <HStack mx="auto" space={100}>
+            <NumericInput
+              initValue={localObservable.tempActual.t1}
+              value={localObservable.tempActual.t1}
+              onChange={localObservable.t1Handler}
+              minValue={17.0}
+              maxValue={27.0}
+              step={0.1}
+              editable={false}
+              valueType="real"
+              rounded
+              textColor="black"
+              rightButtonBackgroundColor="#f59e0b"
+              leftButtonBackgroundColor="#d97706"
+            />
+            <NumericInput
+              initValue={localObservable.tempActual.t2}
+              value={localObservable.tempActual.t2}
+              onChange={localObservable.t2Handler}
+              minValue={17.0}
+              maxValue={27.0}
+              step={0.1}
+              editable={false}
+              valueType="real"
+              rounded
+              textColor="black"
+              rightButtonBackgroundColor="#f59e0b"
+              leftButtonBackgroundColor="#d97706"
+            />
+          </HStack>
+          <HStack mx="auto" space={100}>
+            <NumericInput
+              initValue={localObservable.tempActual.t3}
+              value={localObservable.tempActual.t3}
+              onChange={localObservable.t3Handler}
+              minValue={17.0}
+              maxValue={27.0}
+              step={0.1}
+              editable={false}
+              valueType="real"
+              rounded
+              textColor="black"
+              rightButtonBackgroundColor="#f59e0b"
+              leftButtonBackgroundColor="#d97706"
+            />
+            <NumericInput
+              initValue={localObservable.tempActual.t4}
+              value={localObservable.tempActual.t4}
+              onChange={localObservable.t4Handler}
+              minValue={17.0}
+              maxValue={27.0}
+              step={0.1}
+              editable={false}
+              valueType="real"
+              rounded
+              textColor="black"
+              rightButtonBackgroundColor="#f59e0b"
+              leftButtonBackgroundColor="#d97706"
+            />
+          </HStack>
+          <HStack mx="auto" space={100}>
+            <NumericInput
+              initValue={localObservable.tempActual.t5}
+              value={localObservable.tempActual.t5}
+              onChange={localObservable.t5Handler}
+              minValue={17.0}
+              maxValue={27.0}
+              step={0.1}
+              editable={false}
+              valueType="real"
+              rounded
+              textColor="black"
+              rightButtonBackgroundColor="#f59e0b"
+              leftButtonBackgroundColor="#d97706"
+            />
+            <NumericInput
+              initValue={localObservable.tempActual.t6}
+              value={localObservable.tempActual.t6}
+              onChange={localObservable.t6Handler}
+              minValue={17.0}
+              maxValue={27.0}
+              step={0.1}
+              editable={false}
+              valueType="real"
+              rounded
+              textColor="black"
+              rightButtonBackgroundColor="#f59e0b"
+              leftButtonBackgroundColor="#d97706"
+            />
+          </HStack>
+          <FormControl.ErrorMessage>
+            Debe completar todos los campos.
+          </FormControl.ErrorMessage>
+        </FormControl>
         <Button
           bg="primary.800"
           mx="auto"
@@ -155,15 +167,17 @@ const TemperaturasScreen = ({ navigation }: any) => {
           setShowCam={localObservable.setShowCam}
           setFoto={localObservable.setFoto}
         />
-        <VStack space={2} alignItems="center" safeAreaTop my={6}>
-          <Image
-            source={{
-              uri: ControlStore.controlImage,
-            }}
-            alt="Alternate Text"
-            size={'xl'}
-          />
-        </VStack>
+        {ControlStore.controlImage !== '' && (
+          <VStack space={2} alignItems="center" safeAreaTop my={6}>
+            <Image
+              source={{
+                uri: ControlStore.controlImage,
+              }}
+              alt="Alternate Text"
+              size={'xl'}
+            />
+          </VStack>
+        )}
         <HStack ml={5} mr={5} space={150}>
           <IconButton
             bg="primary.800"
@@ -193,7 +207,7 @@ const TemperaturasScreen = ({ navigation }: any) => {
             flex={1}
             // eslint-disable-next-line react/jsx-no-bind
             onPress={() => {
-              if (localObservable.nroCamaActual === 2) {
+              if (localObservable.nroCamaActual === 6) {
                 localObservable.pushTemp(localObservable.tempActual);
                 localObservable.saveTemperaturas();
                 navigation.navigate('CargarDatos');
