@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class SessionStore {
   username: string = '';
+  user_id: number = -1;
   role: string = '';
   isLoggedIn: boolean = false;
   loading: boolean = false;
@@ -18,12 +19,14 @@ class SessionStore {
   }
 
   setAuthenticationInfo(info: any) {
+    AsyncStorage.setItem('user_id', info.user_id.toString());
     AsyncStorage.setItem('token', info.token);
     AsyncStorage.setItem('username', info.username);
     AsyncStorage.setItem('role', info.role);
     this.username = info.username;
+    this.user_id = info.user_id;
     this.role = info.role;
-    if (this.username !== null && this.role !== null) {
+    if (this.username !== null && this.user_id !== -1 && this.role !== null) {
       this.isLoggedIn = true;
     }
     this.loginError = false;
@@ -44,10 +47,12 @@ class SessionStore {
 
   logout() {
     this.username = '';
+    this.user_id = -1;
     this.role = '';
     this.isLoggedIn = false;
     AsyncStorage.removeItem('token');
     AsyncStorage.removeItem('username');
+    AsyncStorage.removeItem('user_id');
     AsyncStorage.removeItem('role');
   }
 }

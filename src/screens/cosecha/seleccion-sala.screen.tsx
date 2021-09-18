@@ -25,7 +25,6 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
 
   useEffect(() => {
     SalaStore.getSalasListFromAPI();
-    //ControlStore.getControlImage(14);
   }, []);
 
   useEffect(() => {}, [ControlStore.controlImage]);
