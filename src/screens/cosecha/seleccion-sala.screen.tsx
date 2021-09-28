@@ -17,7 +17,7 @@ import SalaStore from '../../stores/sala.store';
 import TurnoStore from '../../stores/turno.store';
 // eslint-disable-next-line no-unused-vars
 import { SalaDTO } from '../../models/sala';
-import ControlStore from '../../stores/control.store';
+import CosechaStore from '../../stores/cosecha.store';
 
 const SeleccionSalaScreen = ({ navigation }: any) => {
   const [sala, setSala] = useState('');
@@ -27,25 +27,23 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
     SalaStore.getSalasListFromAPI();
   }, []);
 
-  useEffect(() => {}, [ControlStore.controlImage]);
-
   function handleSalaSelect(itemValue: any) {
     setSala(itemValue);
     SalaStore.getSalaFromAPI(itemValue);
-    ControlStore.setSala(itemValue);
+    CosechaStore.setSala(itemValue);
   }
 
   function handleTurnoSelect(itemValue: any) {
     setTurno(itemValue);
     TurnoStore.getTurnoFromAPI(itemValue);
-    ControlStore.setTurno(itemValue);
+    CosechaStore.setTurno(itemValue);
   }
 
   return (
     <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">
       <VStack space={2} mt={5}>
         <Heading size="lg" color="primary.800">
-          Control
+          Cosecha
         </Heading>
         <Text
           mb={2}
@@ -161,8 +159,8 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
           flex={1}
           // eslint-disable-next-line react/jsx-no-bind
           onPress={() => {
-            ControlStore.setPersonal(1);
-            navigation.navigate('Temperaturas');
+            CosechaStore.setPersonal(1);
+            navigation.navigate('CargarDatos');
           }}>
           Cargar Datos
         </IconButton>

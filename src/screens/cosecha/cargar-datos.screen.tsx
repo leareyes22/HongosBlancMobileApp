@@ -11,16 +11,19 @@ import {
   IconButton,
   Select,
   Spinner,
+  Text,
   TextArea,
   VStack,
 } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import NumericInput from 'react-native-numeric-input';
 import createLocalObservable from './state/cargar-datos.state';
-import ControlStore from '../../stores/control.store';
-import SalaStore from '../../stores/sala.store';
 // eslint-disable-next-line no-unused-vars
 import { SalaDTO } from '../../models/sala';
+import ProductoStore from '../../stores/producto.store';
+import CosechaStore from '../../stores/cosecha.store';
+// eslint-disable-next-line no-unused-vars
+import ProductoDTO from '../../models/producto';
 
 const CargarDatosScreen = ({ navigation }: any) => {
   const localObservable = useLocalObservable(createLocalObservable);
@@ -29,38 +32,41 @@ const CargarDatosScreen = ({ navigation }: any) => {
 
   function handleProductoSelect(itemValue: any) {
     setProducto(itemValue);
-    //SalaStore.getSalaFromAPI(itemValue);
-    //ControlStore.setSala(itemValue);
+    ProductoStore.getProductoFromAPI(itemValue);
+    CosechaStore.setProducto(itemValue);
   }
 
+  useEffect(() => {
+    ProductoStore.getProductosListFromAPI();
+  }, []);
+
   useEffect(() => {}, [
-    ControlStore.control.loading,
-    ControlStore.control.hasError,
+    CosechaStore.cosecha.loading,
+    CosechaStore.cosecha.hasError,
   ]);
 
   return (
     <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">
       <VStack space={2} mt={5}>
         <Heading size="lg" color="primary.800">
-          Cargar Datos
+          Cargar datos
         </Heading>
         <FormControl
           mb={1}
           isRequired
-          //</VStack>isInvalid={localObservable.control.temperatura_aire === 0}>
-        >
+          isInvalid={localObservable.cosecha.kg_cosechados === 0.0}>
           <FormControl.Label
             _text={{
               color: '#000000',
               bold: true,
             }}>
-            Cantidad Cosechada
+            Cantidad cosechada (kg)
           </FormControl.Label>
           <NumericInput
-            //value={localObservable.control.temperatura_aire}
+            value={localObservable.cosecha.kg_cosechados}
             totalWidth={240}
             totalHeight={50}
-            onChange={() => console.log('cosecha')}
+            onChange={localObservable.kgCosechadosHandler}
             minValue={0.0}
             step={0.1}
             valueType="real"
@@ -73,7 +79,10 @@ const CargarDatosScreen = ({ navigation }: any) => {
             Debe ingresar un valor.
           </FormControl.ErrorMessage>
         </FormControl>
-        <FormControl mb={1}>
+        <FormControl
+          mb={1}
+          isRequired
+          isInvalid={CosechaStore.cosecha.data.id_producto === -1}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -85,7 +94,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
             borderColor="primary.900"
             selectedValue={producto}
             minWidth={200}
-            placeholder="Seleccione una sala"
+            placeholder="Seleccione un producto"
             // eslint-disable-next-line react/jsx-no-bind
             onValueChange={handleProductoSelect}
             _selectedItem={{
@@ -96,47 +105,34 @@ const CargarDatosScreen = ({ navigation }: any) => {
             _dark={{
               color: '#000000',
             }}>
-            {SalaStore.salasList.data.map((value: SalaDTO, index: number) => {
-              return (
-                <Select.Item
-                  key={index}
-                  label={value.nombre}
-                  value={value.id.toString()}
-                />
-              );
-            })}
+            {ProductoStore.productosList.data.map(
+              (value: ProductoDTO, index: number) => {
+                return (
+                  <Select.Item
+                    key={index}
+                    label={value.nombre}
+                    value={value.id.toString()}
+                  />
+                );
+              },
+            )}
           </Select>
-        </FormControl>
-        <FormControl
-          mb={1}
-          isRequired
-          >
-          <FormControl.Label
-            _text={{
-              color: '#000000',
-              bold: true,
-            }}>
-            Porcentaje de CO2
-          </FormControl.Label>
-          <NumericInput
-            totalWidth={240}
-            totalHeight={50}
-            onChange={() => console.log('cosecha')}
-            minValue={0.0}
-            step={0.1}
-            valueType="real"
-            rounded
-            textColor="black"
-            rightButtonBackgroundColor="#f59e0b"
-            leftButtonBackgroundColor="#d97706"
-          />
           <FormControl.ErrorMessage>
             Debe ingresar un valor.
           </FormControl.ErrorMessage>
         </FormControl>
+        <FormControl mb={1}>
+          <Text
+            _dark={{
+              color: '#000000',
+            }}>
+            {'Descripción: ' + ProductoStore.producto.data.descripcion}
+          </Text>
+        </FormControl>
         <FormControl
           mb={1}
-          isRequired>
+          isRequired
+          isInvalid={localObservable.cosecha.observaciones === ''}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -150,14 +146,17 @@ const CargarDatosScreen = ({ navigation }: any) => {
             _dark={{
               color: '#000000',
             }}
-            onChangeText={() => console.log('cosecha')}
+            onChangeText={localObservable.observacionesHandler}
             placeholder="Ingrese las observaciones..."
             maxLength={250}
           />
+          <FormControl.ErrorMessage>
+            Debe ingresar un valor.
+          </FormControl.ErrorMessage>
         </FormControl>
-        <LoadingMessage submitted={true} />
-        <SuccessMessage submitted={true} />
-        <ErrorMessage submitted={true} />
+        <LoadingMessage submitted={localObservable.submitted} />
+        <SuccessMessage submitted={localObservable.submitted} />
+        <ErrorMessage submitted={localObservable.submitted} />
         <HStack space={120}>
           <IconButton
             bg="primary.800"
@@ -171,7 +170,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
             }
             flex={1}
             // eslint-disable-next-line react/jsx-no-bind
-            onPress={() => navigation.navigate('Temperaturas')}
+            onPress={() => navigation.navigate('SeleccionSala')}
           />
           <Button
             bg="primary.800"
@@ -182,8 +181,10 @@ const CargarDatosScreen = ({ navigation }: any) => {
                 size={26}
               />
             }
-            disabled={true}
-            //onPress={localObservable.submitHandler}
+            disabled={
+              producto === '' || localObservable.cosecha.kg_cosechados === 0
+            }
+            onPress={localObservable.submitHandler}
             flex={2}>
             Cargar datos
           </Button>
@@ -194,20 +195,20 @@ const CargarDatosScreen = ({ navigation }: any) => {
 };
 
 const LoadingMessage = (props: any) => {
-  const shouldRender = props.submitted && ControlStore.control.loading;
+  const shouldRender = props.submitted && CosechaStore.cosecha.loading;
   if (!shouldRender) {
     return null;
   }
   return (
     <HStack space={2}>
-      <Heading color="primary.600">Cargando control...</Heading>
+      <Heading color="primary.600">Cargando cosecha...</Heading>
       <Spinner color="primary.600" />
     </HStack>
   );
 };
 
 const SuccessMessage = (props: any) => {
-  const shouldRender = props.submitted && !ControlStore.control.hasError;
+  const shouldRender = props.submitted && !CosechaStore.cosecha.hasError;
   if (!shouldRender) {
     return null;
   }
@@ -222,7 +223,7 @@ const SuccessMessage = (props: any) => {
 };
 
 const ErrorMessage = (props: any) => {
-  const shouldRender = props.submitted && ControlStore.control.hasError;
+  const shouldRender = props.submitted && CosechaStore.cosecha.hasError;
   if (!shouldRender) {
     return null;
   }
