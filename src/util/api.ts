@@ -2,7 +2,7 @@ import axios from 'axios';
 import _ from 'lodash';
 import SessionStore from '../stores/session.store';
 
-const API_HOST = 'http://192.168.0.23:5001';
+const API_HOST = 'http://192.168.0.38:5001';
 const API_PREFIX = '/api';
 
 // urls without authentication bearer

@@ -4,23 +4,23 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SeleccionSalaScreen from './seleccion-sala.screen';
 import CargarDatosScreen from './cargar-datos.screen';
 
-const ControlStackNav = createStackNavigator();
+const CosechaStackNav = createStackNavigator();
 
-const ControlStack = () => {
+const CosechaStack = () => {
   return (
-    <ControlStackNav.Navigator initialRouteName="SeleccionSala">
-      <ControlStackNav.Screen
+    <CosechaStackNav.Navigator initialRouteName="SeleccionSala">
+      <CosechaStackNav.Screen
         options={{ headerShown: false }}
         name="SeleccionSala"
         component={SeleccionSalaScreen}
       />
-      <ControlStackNav.Screen
+      <CosechaStackNav.Screen
         options={{ headerShown: false }}
         name="CargarDatos"
         component={CargarDatosScreen}
       />
-    </ControlStackNav.Navigator>
+    </CosechaStackNav.Navigator>
   );
 };
 
-export default observer(ControlStack);
+export default observer(CosechaStack);

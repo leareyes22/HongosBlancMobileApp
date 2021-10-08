@@ -29,7 +29,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
     <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">
       <VStack space={2} mt={5}>
         <Heading size="lg" color="primary.800">
-          Cargar Datos
+          Cargar datos
         </Heading>
         <FormControl
           mb={1}
@@ -40,7 +40,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
               color: '#000000',
               bold: true,
             }}>
-            Temperatura del Aire (°C)
+            Temperatura del aire (°C)
           </FormControl.Label>
           <NumericInput
             value={localObservable.control.temperatura_aire}
@@ -69,7 +69,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
               color: '#000000',
               bold: true,
             }}>
-            Humedad Relativa (%)
+            Humedad relativa (%)
           </FormControl.Label>
           <NumericInput
             value={localObservable.control.humedad_relativa}
