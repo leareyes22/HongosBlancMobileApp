@@ -1,10 +1,12 @@
 import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { makeAutoObservable } from 'mobx';
+import { addCosecha, getDBConnection } from '../database/database';
 // eslint-disable-next-line no-unused-vars
 import CreateCosechaDTO, { emptyCreateCosechaDTO } from '../models/cosecha';
 // eslint-disable-next-line no-unused-vars
 import { initialUIWrapper, UIWrapper } from '../models/ui-wrapper';
 import API from '../util/api';
+import SessionStore from './session.store';
 
 class CosechaStore {
   cosecha: UIWrapper<CreateCosechaDTO> = initialUIWrapper(
@@ -18,15 +20,25 @@ class CosechaStore {
 
   async createCosecha(cosecha: CreateCosechaDTO) {
     this.setCosechaWrapper(this.setLoading(this.cosecha));
-    try {
-      const r = await API.post(`/cosecha`, cosecha);
-      if (r.status === StatusCodes.OK) {
-        this.setCosechaWrapper(this.unsetLoading(this.cosecha));
-      } else {
-        this.setCosechaWrapper(this.setError(this.cosecha, r.status));
+    if (SessionStore.isOnline) {
+      try {
+        const r = await API.post(`/cosecha`, cosecha);
+        if (r.status === StatusCodes.OK) {
+          this.setCosechaWrapper(this.unsetLoading(this.cosecha));
+        } else {
+          this.setCosechaWrapper(this.setError(this.cosecha, r.status));
+        }
+      } catch (e) {
+        this.setCosechaWrapper(this.setError(this.cosecha, e.response.status));
       }
-    } catch (e) {
-      this.setCosechaWrapper(this.setError(this.cosecha, e.response.status));
+    } else {
+      try {
+        const db = await getDBConnection();
+        addCosecha(db, cosecha);
+        this.setCosechaWrapper(this.unsetLoading(this.cosecha));
+      } catch (e) {
+        this.setCosechaWrapper(this.setError(this.cosecha, e.response.status));
+      }
     }
   }
 

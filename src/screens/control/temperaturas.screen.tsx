@@ -23,12 +23,13 @@ const TemperaturasScreen = ({ navigation }: any) => {
   const localObservable = useLocalObservable(createLocalObservable);
 
   const nextDisabled =
-    localObservable.tempActual.t1 === 0.0 ||
-    localObservable.tempActual.t2 === 0.0 ||
-    localObservable.tempActual.t3 === 0.0 ||
-    localObservable.tempActual.t4 === 0.0 ||
-    localObservable.tempActual.t5 === 0.0 ||
-    localObservable.tempActual.t6 === 0.0;
+    localObservable.tempActual.t1 === 17.0 ||
+    localObservable.tempActual.t2 === 17.0 ||
+    localObservable.tempActual.t3 === 17.0 ||
+    localObservable.tempActual.t4 === 17.0 ||
+    localObservable.tempActual.t5 === 17.0 ||
+    localObservable.tempActual.t6 === 17.0 ||
+    !localObservable.photoHasTaken;
 
   return (
     <ScrollView flex={1} p={2} w="100%" mx="auto" bg="primary.100">
@@ -148,7 +149,7 @@ const TemperaturasScreen = ({ navigation }: any) => {
             />
           </HStack>
           <FormControl.ErrorMessage>
-            Debe completar todos los campos.
+            Debe completar todas las temperaturas y tomar foto de la cama.
           </FormControl.ErrorMessage>
         </FormControl>
         <Button
@@ -175,6 +176,7 @@ const TemperaturasScreen = ({ navigation }: any) => {
               }}
               alt="Alternate Text"
               size={'xl'}
+              borderRadius="12px"
             />
           </VStack>
         )}
@@ -207,6 +209,8 @@ const TemperaturasScreen = ({ navigation }: any) => {
             flex={1}
             // eslint-disable-next-line react/jsx-no-bind
             onPress={() => {
+              localObservable.setPhotoHasTaken(false);
+              ControlStore.setControlImage('');
               if (localObservable.nroCamaActual === 6) {
                 localObservable.pushTemp(localObservable.tempActual);
                 localObservable.saveTemperaturas();

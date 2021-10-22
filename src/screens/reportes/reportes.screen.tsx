@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Dimensions } from 'react-native';
 import { Box, Heading, VStack } from 'native-base';
@@ -8,6 +8,7 @@ import {
   StackedBarChart,
 } from 'react-native-chart-kit';
 import { ScrollView } from 'react-native-gesture-handler';
+import controlStore from '../../stores/control.store';
 
 const data = {
   labels: ['P1', 'P2'], // optional
@@ -50,6 +51,10 @@ const chartConfig = {
 };
 
 const ReportesScreen = () => {
+  /*useEffect(() => {
+    controlStore.syncControls();
+  }, []);*/
+
   return (
     <ScrollView>
       <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">

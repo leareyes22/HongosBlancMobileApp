@@ -45,6 +45,11 @@ const CargarDatosScreen = ({ navigation }: any) => {
     CosechaStore.cosecha.hasError,
   ]);
 
+  const loadDataButtonDisabled =
+    producto === '' ||
+    localObservable.cosecha.kg_cosechados === 0 ||
+    localObservable.cosecha.observaciones === '';
+
   return (
     <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">
       <VStack space={2} mt={5}>
@@ -181,9 +186,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
                 size={26}
               />
             }
-            disabled={
-              producto === '' || localObservable.cosecha.kg_cosechados === 0
-            }
+            disabled={loadDataButtonDisabled}
             onPress={localObservable.submitHandler}
             flex={2}>
             Cargar datos
@@ -208,7 +211,10 @@ const LoadingMessage = (props: any) => {
 };
 
 const SuccessMessage = (props: any) => {
-  const shouldRender = props.submitted && !CosechaStore.cosecha.hasError;
+  const shouldRender =
+    props.submitted &&
+    !CosechaStore.cosecha.hasError &&
+    !CosechaStore.cosecha.loading;
   if (!shouldRender) {
     return null;
   }

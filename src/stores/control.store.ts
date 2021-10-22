@@ -1,5 +1,6 @@
 import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { makeAutoObservable } from 'mobx';
+import { addControl, getDBConnection } from '../database/database';
 // eslint-disable-next-line no-unused-vars
 import CreateControlDTO, { emptyCreateControlDTO } from '../models/control';
 // eslint-disable-next-line no-unused-vars
@@ -7,6 +8,7 @@ import TemperaturaCamaDTO from '../models/temperatura-cama';
 // eslint-disable-next-line no-unused-vars
 import { initialUIWrapper, UIWrapper } from '../models/ui-wrapper';
 import API from '../util/api';
+import SessionStore from './session.store';
 
 class ControlStore {
   control: UIWrapper<CreateControlDTO> = initialUIWrapper(
@@ -16,21 +18,35 @@ class ControlStore {
   controlImages: Array<any> = [];
   controlList: UIWrapper<Array<CreateControlDTO>> = initialUIWrapper([]);
 
+  //sync variables
+  controls: any = [];
+  temperaturas: any = [];
+
   constructor() {
     makeAutoObservable(this);
   }
 
   async createControl(control: CreateControlDTO) {
     this.setControlWrapper(this.setLoading(this.control));
-    try {
-      const r = await API.post(`/control`, control);
-      if (r.status === StatusCodes.OK) {
-        this.uploadControlImages(r.data.id_control);
-      } else {
-        this.setControlWrapper(this.setError(this.control, r.status));
+    if (SessionStore.isOnline) {
+      try {
+        const r = await API.post(`/control`, control);
+        if (r.status === StatusCodes.OK) {
+          this.uploadControlImages(r.data.id_control);
+        } else {
+          this.setControlWrapper(this.setError(this.control, r.status));
+        }
+      } catch (e) {
+        this.setControlWrapper(this.setError(this.control, e.response.status));
       }
-    } catch (e) {
-      this.setControlWrapper(this.setError(this.control, e.response.status));
+    } else {
+      try {
+        const db = await getDBConnection();
+        addControl(db, control, this.controlImages);
+        this.setControlWrapper(this.unsetLoading(this.control));
+      } catch (e) {
+        this.setControlWrapper(this.setError(this.control, e.response.status));
+      }
     }
   }
 
@@ -50,6 +66,7 @@ class ControlStore {
         this.setControlWrapper(this.setError(this.control, e.response.status));
       }
     });
+    this.setControlImages([]);
   }
 
   async getControlImage(id: number) {
@@ -74,6 +91,10 @@ class ControlStore {
       type: 'image/jpg',
     });
     this.controlImage = data.uri;
+  }
+
+  setControlImages(data: Array<any>) {
+    this.controlImages = data;
   }
 
   setControlImage(imageUri: string) {
