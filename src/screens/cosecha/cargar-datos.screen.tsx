@@ -1,35 +1,54 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import {
   Alert,
   Box,
   Button,
+  CheckIcon,
   FormControl,
   Heading,
   HStack,
   IconButton,
+  Select,
   Spinner,
+  Text,
   TextArea,
   VStack,
 } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import NumericInput from 'react-native-numeric-input';
 import createLocalObservable from './state/cargar-datos.state';
-import ControlStore from '../../stores/control.store';
+// eslint-disable-next-line no-unused-vars
+import { SalaDTO } from '../../models/sala';
+import ProductoStore from '../../stores/producto.store';
+import CosechaStore from '../../stores/cosecha.store';
+// eslint-disable-next-line no-unused-vars
+import ProductoDTO from '../../models/producto';
 
 const CargarDatosScreen = ({ navigation }: any) => {
   const localObservable = useLocalObservable(createLocalObservable);
 
+  const [producto, setProducto] = useState('');
+
+  function handleProductoSelect(itemValue: any) {
+    setProducto(itemValue);
+    ProductoStore.getProductoFromAPI(itemValue);
+    CosechaStore.setProducto(itemValue);
+  }
+
+  useEffect(() => {
+    ProductoStore.getProductosListFromAPI();
+  }, []);
+
   useEffect(() => {}, [
-    ControlStore.control.loading,
-    ControlStore.control.hasError,
+    CosechaStore.cosecha.loading,
+    CosechaStore.cosecha.hasError,
   ]);
 
   const loadDataButtonDisabled =
-    localObservable.control.temperatura_aire === 0.0 ||
-    localObservable.control.humedad_relativa === 0.0 ||
-    localObservable.control.co2 === 0.0 ||
-    localObservable.control.observaciones === '';
+    producto === '' ||
+    localObservable.cosecha.kg_cosechados === 0 ||
+    localObservable.cosecha.observaciones === '';
 
   return (
     <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">
@@ -40,50 +59,20 @@ const CargarDatosScreen = ({ navigation }: any) => {
         <FormControl
           mb={1}
           isRequired
-          isInvalid={localObservable.control.temperatura_aire === 0}>
+          isInvalid={localObservable.cosecha.kg_cosechados === 0.0}>
           <FormControl.Label
             _text={{
               color: '#000000',
               bold: true,
             }}>
-            Temperatura del aire (°C)
+            Cantidad cosechada (kg)
           </FormControl.Label>
           <NumericInput
-            value={localObservable.control.temperatura_aire}
+            value={localObservable.cosecha.kg_cosechados}
             totalWidth={240}
             totalHeight={50}
-            onChange={localObservable.tempAireHandler}
-            minValue={17.0}
-            maxValue={27.0}
-            step={0.1}
-            valueType="real"
-            rounded
-            textColor="black"
-            rightButtonBackgroundColor="#f59e0b"
-            leftButtonBackgroundColor="#d97706"
-          />
-          <FormControl.ErrorMessage>
-            Debe ingresar un valor.
-          </FormControl.ErrorMessage>
-        </FormControl>
-        <FormControl
-          mb={1}
-          isRequired
-          isInvalid={localObservable.control.humedad_relativa === 0}>
-          <FormControl.Label
-            _text={{
-              color: '#000000',
-              bold: true,
-            }}>
-            Humedad relativa (%)
-          </FormControl.Label>
-          <NumericInput
-            value={localObservable.control.humedad_relativa}
-            totalWidth={240}
-            totalHeight={50}
-            onChange={localObservable.humRelativaHandler}
+            onChange={localObservable.kgCosechadosHandler}
             minValue={0.0}
-            maxValue={100.0}
             step={0.1}
             valueType="real"
             rounded
@@ -98,36 +87,57 @@ const CargarDatosScreen = ({ navigation }: any) => {
         <FormControl
           mb={1}
           isRequired
-          isInvalid={localObservable.control.co2 === 0}>
+          isInvalid={CosechaStore.cosecha.data.id_producto === -1}>
           <FormControl.Label
             _text={{
               color: '#000000',
               bold: true,
             }}>
-            CO2 (ppm)
+            Producto
           </FormControl.Label>
-          <NumericInput
-            value={localObservable.control.co2}
-            totalWidth={240}
-            totalHeight={50}
-            onChange={localObservable.porcentajeCO2Handler}
-            minValue={0.0}
-            maxValue={9999}
-            step={0.1}
-            valueType="real"
-            rounded
-            textColor="black"
-            rightButtonBackgroundColor="#f59e0b"
-            leftButtonBackgroundColor="#d97706"
-          />
+          <Select
+            borderColor="primary.900"
+            selectedValue={producto}
+            minWidth={200}
+            placeholder="Seleccione un producto"
+            // eslint-disable-next-line react/jsx-no-bind
+            onValueChange={handleProductoSelect}
+            _selectedItem={{
+              bg: 'primary.700',
+              endIcon: <CheckIcon size={5} />,
+            }}
+            mt={1}
+            _dark={{
+              color: '#000000',
+            }}>
+            {ProductoStore.productosList.data.map(
+              (value: ProductoDTO, index: number) => {
+                return (
+                  <Select.Item
+                    key={index}
+                    label={value.nombre}
+                    value={value.id.toString()}
+                  />
+                );
+              },
+            )}
+          </Select>
           <FormControl.ErrorMessage>
             Debe ingresar un valor.
           </FormControl.ErrorMessage>
         </FormControl>
+        <FormControl mb={1}>
+          <Text
+            _dark={{
+              color: '#000000',
+            }}>
+            {'Descripción: ' + ProductoStore.producto.data.descripcion}
+          </Text>
+        </FormControl>
         <FormControl
           mb={1}
           isRequired
-          isInvalid={localObservable.control.observaciones === ''}>
+          isInvalid={localObservable.cosecha.observaciones === ''}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -145,6 +155,9 @@ const CargarDatosScreen = ({ navigation }: any) => {
             placeholder="Ingrese las observaciones..."
             maxLength={250}
           />
+          <FormControl.ErrorMessage>
+            Debe ingresar un valor.
+          </FormControl.ErrorMessage>
         </FormControl>
         <LoadingMessage submitted={localObservable.submitted} />
         <SuccessMessage submitted={localObservable.submitted} />
@@ -162,7 +175,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
             }
             flex={1}
             // eslint-disable-next-line react/jsx-no-bind
-            onPress={() => navigation.navigate('Temperaturas')}
+            onPress={() => navigation.navigate('SeleccionSala')}
           />
           <Button
             bg="primary.800"
@@ -173,7 +186,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
                 size={26}
               />
             }
-            disabled={localObservable.submitted || loadDataButtonDisabled}
+            disabled={loadDataButtonDisabled}
             onPress={localObservable.submitHandler}
             flex={2}>
             Cargar datos
@@ -185,13 +198,13 @@ const CargarDatosScreen = ({ navigation }: any) => {
 };
 
 const LoadingMessage = (props: any) => {
-  const shouldRender = props.submitted && ControlStore.control.loading;
+  const shouldRender = props.submitted && CosechaStore.cosecha.loading;
   if (!shouldRender) {
     return null;
   }
   return (
     <HStack space={2}>
-      <Heading color="primary.600">Cargando control...</Heading>
+      <Heading color="primary.600">Cargando cosecha...</Heading>
       <Spinner color="primary.600" />
     </HStack>
   );
@@ -200,8 +213,8 @@ const LoadingMessage = (props: any) => {
 const SuccessMessage = (props: any) => {
   const shouldRender =
     props.submitted &&
-    !ControlStore.control.hasError &&
-    !ControlStore.control.loading;
+    !CosechaStore.cosecha.hasError &&
+    !CosechaStore.cosecha.loading;
   if (!shouldRender) {
     return null;
   }
@@ -209,14 +222,14 @@ const SuccessMessage = (props: any) => {
     <Alert status={'success'} w="100%">
       <Alert.Icon />
       <Alert.Title flexShrink={1}>
-        El control se ha cargado exitosamente.
+        La cosecha se ha cargado exitosamente.
       </Alert.Title>
     </Alert>
   );
 };
 
 const ErrorMessage = (props: any) => {
-  const shouldRender = props.submitted && ControlStore.control.hasError;
+  const shouldRender = props.submitted && CosechaStore.cosecha.hasError;
   if (!shouldRender) {
     return null;
   }

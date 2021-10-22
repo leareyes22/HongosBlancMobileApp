@@ -1,11 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { Box, Button, FormControl, Image, Input, VStack } from 'native-base';
-import createLocalObservable from './login.state';
+import {
+  Alert,
+  Box,
+  Button,
+  FormControl,
+  Heading,
+  HStack,
+  Image,
+  Input,
+  Spinner,
+  VStack,
+} from 'native-base';
+import createLocalObservable from './state/login.state';
 const logo = require('../../assets/Logo-HongosBlanc.png');
+import SessionStore from '../../stores/session.store';
 
 const LoginScreen = () => {
   const localObservable = useLocalObservable(createLocalObservable);
+
+  useEffect(() => {}, [SessionStore.loginError]);
 
   return (
     <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">
@@ -54,9 +68,46 @@ const LoginScreen = () => {
             onPress={localObservable.loginHandler}>
             Iniciar sesión
           </Button>
+          <LoadingMessage />
+          <ErrorMessage />
         </VStack>
       </VStack>
     </Box>
+  );
+};
+
+const LoadingMessage = () => {
+  const shouldRender = SessionStore.loading;
+  if (!shouldRender) {
+    return null;
+  }
+  return (
+    <HStack space={2}>
+      <Heading color="primary.600">Cargando...</Heading>
+      <Spinner color="primary.600" />
+    </HStack>
+  );
+};
+
+const ErrorMessage = () => {
+  const shouldRender = !SessionStore.loading && SessionStore.loginError;
+  if (!shouldRender) {
+    return null;
+  }
+  return (
+    <Alert status={'error'} w="100%">
+      <Alert.Icon />
+      {SessionStore.loginErrorCode === 500 && (
+        <Alert.Title flexShrink={1}>
+          Ha ocurrido un error. Contacte a soporte.
+        </Alert.Title>
+      )}
+      {SessionStore.loginErrorCode === 401 && (
+        <Alert.Title flexShrink={1}>
+          Usuario o contraseña incorrectos. Intente nuevamente.
+        </Alert.Title>
+      )}
+    </Alert>
   );
 };
 

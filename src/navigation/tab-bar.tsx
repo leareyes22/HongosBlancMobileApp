@@ -1,7 +1,7 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import CosechaScreen from '../screens/cosecha/cosecha.screen';
+import CosechaNavigationStack from '../screens/cosecha/cosecha-navigation-stack';
 import ReportesScreen from '../screens/reportes/reportes.screen';
 import TareasScreen from '../screens/tareas/tareas.screen';
 import ControlNavigationStack from '../screens/control/control-navigation-stack';
@@ -62,7 +62,7 @@ function TabBar() {
       />
       <Tab.Screen
         name="Cosecha"
-        component={CosechaScreen}
+        component={CosechaNavigationStack}
         options={{
           tabBarLabel: 'Cosecha',
           // eslint-disable-next-line react/display-name

@@ -1,6 +1,5 @@
-import { emptyUsuario } from '../../models/usuario';
-import LoginStore from '../../stores/login.store';
-import SessionStore from '../../stores/session.store';
+import { emptyUsuario } from '../../../models/usuario';
+import LoginStore from '../../../stores/login.store';
 
 const createLocalObservable = () => ({
   usuario: emptyUsuario,
@@ -18,7 +17,6 @@ const createLocalObservable = () => ({
   loginHandler() {
     if (this.usuario.username !== '' && this.usuario.password !== '') {
       LoginStore.login(this.usuario);
-      //SessionStore.setLoggedIn(true);
     }
     if (this.usuario.username === '') {
       this.setUsernameRequiredError(true);
