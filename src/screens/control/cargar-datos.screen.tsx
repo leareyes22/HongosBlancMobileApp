@@ -25,6 +25,12 @@ const CargarDatosScreen = ({ navigation }: any) => {
     ControlStore.control.hasError,
   ]);
 
+  const loadDataButtonDisabled =
+    localObservable.control.temperatura_aire === 0.0 ||
+    localObservable.control.humedad_relativa === 0.0 ||
+    localObservable.control.co2 === 0.0 ||
+    localObservable.control.observaciones === '';
+
   return (
     <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">
       <VStack space={2} mt={5}>
@@ -167,7 +173,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
                 size={26}
               />
             }
-            disabled={localObservable.submitted}
+            disabled={localObservable.submitted || loadDataButtonDisabled}
             onPress={localObservable.submitHandler}
             flex={2}>
             Cargar datos
@@ -192,7 +198,10 @@ const LoadingMessage = (props: any) => {
 };
 
 const SuccessMessage = (props: any) => {
-  const shouldRender = props.submitted && !ControlStore.control.hasError;
+  const shouldRender =
+    props.submitted &&
+    !ControlStore.control.hasError &&
+    !ControlStore.control.loading;
   if (!shouldRender) {
     return null;
   }

@@ -208,7 +208,10 @@ const LoadingMessage = (props: any) => {
 };
 
 const SuccessMessage = (props: any) => {
-  const shouldRender = props.submitted && !CosechaStore.cosecha.hasError;
+  const shouldRender =
+    props.submitted &&
+    !CosechaStore.cosecha.hasError &&
+    !CosechaStore.cosecha.loading;
   if (!shouldRender) {
     return null;
   }

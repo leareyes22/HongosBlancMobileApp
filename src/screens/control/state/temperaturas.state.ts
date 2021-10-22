@@ -31,15 +31,16 @@ const createLocalObservable = () => ({
   },
   setNroCamaActual(num: number) {
     this.nroCamaActual = num;
-    console.log(this.nroCamaActual);
   },
   setShowCam(showCam: boolean) {
     this.showCam = showCam;
-    console.log(this.showCam);
   },
   async setFoto(data: any) {
     ControlStore.pushControlImage(data, this.nroCamaActual);
     this.photoHasTaken = true;
+  },
+  setPhotoHasTaken(photoHasTaken: boolean) {
+    this.photoHasTaken = photoHasTaken;
   },
   t1Handler(value: number) {
     this.tempActual.t1 = value;

@@ -18,7 +18,7 @@ export const emptyCreateControlDTO: CreateControlDTO = {
   temperatura_aire: 0.0,
   humedad_relativa: 0.0,
   co2: 0,
-  observaciones: '',
+  observaciones: 'N/A.',
   id_sala: -1,
   id_personal: -1,
   id_turno: -1,
