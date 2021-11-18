@@ -2,7 +2,11 @@ import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { makeAutoObservable } from 'mobx';
 import { addCosecha, getDBConnection } from '../database/database';
 // eslint-disable-next-line no-unused-vars
-import CreateCosechaDTO, { emptyCreateCosechaDTO } from '../models/cosecha';
+import CreateCosechaDTO, {
+  // eslint-disable-next-line no-unused-vars
+  CosechaFilterCriteria,
+  emptyCreateCosechaDTO,
+} from '../models/cosecha';
 // eslint-disable-next-line no-unused-vars
 import { initialUIWrapper, UIWrapper } from '../models/ui-wrapper';
 import API from '../util/api';
@@ -13,6 +17,9 @@ class CosechaStore {
     emptyCreateCosechaDTO,
   );
   cosechaList: UIWrapper<Array<CreateCosechaDTO>> = initialUIWrapper([]);
+
+  //Filter criteria
+  cosechaListFilterCriteria: CosechaFilterCriteria = {};
 
   constructor() {
     makeAutoObservable(this);
@@ -39,6 +46,26 @@ class CosechaStore {
       } catch (e) {
         this.setCosechaWrapper(this.setError(this.cosecha, e.response.status));
       }
+    }
+  }
+
+  async getCosechaListFromAPI() {
+    this.setCosechaListWrapper(this.setLoading(this.cosechaList));
+    try {
+      const r = await API.get(`/cosecha/list`, {
+        params: {
+          ...this.cosechaListFilterCriteria,
+        },
+      });
+      if (r.status === StatusCodes.OK) {
+        this.setCosechaList(r.data);
+      } else {
+        this.setCosechaListWrapper(this.setError(this.cosechaList, r.status));
+      }
+    } catch (e) {
+      this.setCosechaListWrapper(
+        this.setError(this.cosechaList, e.response.status),
+      );
     }
   }
 
@@ -92,6 +119,11 @@ class CosechaStore {
 
   setProducto(producto: number) {
     this.cosecha.data.id_producto = producto;
+  }
+
+  setCosechaListFilterCriteria(filterCriteria: CosechaFilterCriteria) {
+    this.cosechaListFilterCriteria = filterCriteria;
+    this.getCosechaListFromAPI();
   }
 
   setLoading(property: UIWrapper<any>) {

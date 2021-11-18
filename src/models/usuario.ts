@@ -1,11 +1,11 @@
 export interface Usuario {
-  id?: number;
+  id: number;
   username: string;
   password: string;
 }
 
 export const emptyUsuario: Usuario = {
-  id: undefined,
+  id: -1,
   username: '',
   password: '',
 };

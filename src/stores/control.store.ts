@@ -2,7 +2,13 @@ import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { makeAutoObservable } from 'mobx';
 import { addControl, getDBConnection } from '../database/database';
 // eslint-disable-next-line no-unused-vars
-import CreateControlDTO, { emptyCreateControlDTO } from '../models/control';
+import CreateControlDTO, {
+  // eslint-disable-next-line no-unused-vars
+  ControlFilterCriteria,
+  emptyCreateControlDTO,
+  // eslint-disable-next-line no-unused-vars
+  ListControlDTO,
+} from '../models/control';
 // eslint-disable-next-line no-unused-vars
 import TemperaturaCamaDTO from '../models/temperatura-cama';
 // eslint-disable-next-line no-unused-vars
@@ -16,11 +22,10 @@ class ControlStore {
   );
   controlImage: string = '';
   controlImages: Array<any> = [];
-  controlList: UIWrapper<Array<CreateControlDTO>> = initialUIWrapper([]);
+  controlList: UIWrapper<Array<ListControlDTO>> = initialUIWrapper([]);
 
-  //sync variables
-  controls: any = [];
-  temperaturas: any = [];
+  //Filter criteria
+  controlListFilterCriteria: ControlFilterCriteria = {};
 
   constructor() {
     makeAutoObservable(this);
@@ -52,7 +57,7 @@ class ControlStore {
 
   async uploadControlImages(controlId: number) {
     this.setControlWrapper(this.setLoading(this.control));
-    this.controlImages.forEach(async item => {
+    this.controlImages.forEach(async (item: any) => {
       let data = new FormData();
       data.append('image', item);
       try {
@@ -69,18 +74,69 @@ class ControlStore {
     this.setControlImages([]);
   }
 
+  setControlImages(controlImages: Array<string>) {
+    this.controlImages = controlImages;
+  }
+
   async getControlImage(id: number) {
     this.setControlWrapper(this.setLoading(this.control));
     try {
       const r = await API.get(`/control/image/${id}`);
       if (r.status === StatusCodes.OK) {
-        console.log(r.data);
         this.setControlImage(r.data);
       } else {
         this.setControlWrapper(this.setError(this.control, r.status));
       }
     } catch (e) {
       this.setControlWrapper(this.setError(this.control, e.response.status));
+    }
+  }
+
+  async getControlImages(controlId: number) {
+    this.setControlWrapper(this.setLoading(this.control));
+    try {
+      const r = await API.get(`/control/images/${controlId}`);
+      if (r.status === StatusCodes.OK) {
+        return r.data;
+      } else {
+        this.setControlWrapper(this.setError(this.control, r.status));
+      }
+    } catch (e) {
+      this.setControlWrapper(this.setError(this.control, e.response.status));
+    }
+  }
+
+  async getControlTemperaturas(controlId: number) {
+    this.setControlWrapper(this.setLoading(this.control));
+    try {
+      const r = await API.get(`/control/temperaturas/${controlId}`);
+      if (r.status === StatusCodes.OK) {
+        return r.data;
+      } else {
+        this.setControlWrapper(this.setError(this.control, r.status));
+      }
+    } catch (e) {
+      this.setControlWrapper(this.setError(this.control, e.response.status));
+    }
+  }
+
+  async getControlListFromAPI() {
+    this.setControlListWrapper(this.setLoading(this.controlList));
+    try {
+      const r = await API.get(`/control/list`, {
+        params: {
+          ...this.controlListFilterCriteria,
+        },
+      });
+      if (r.status === StatusCodes.OK) {
+        this.setControlList(r.data);
+      } else {
+        this.setControlListWrapper(this.setError(this.controlList, r.status));
+      }
+    } catch (e) {
+      this.setControlListWrapper(
+        this.setError(this.controlList, e.response.status),
+      );
     }
   }
 
@@ -91,10 +147,6 @@ class ControlStore {
       type: 'image/jpg',
     });
     this.controlImage = data.uri;
-  }
-
-  setControlImages(data: Array<any>) {
-    this.controlImages = data;
   }
 
   setControlImage(imageUri: string) {
@@ -115,7 +167,7 @@ class ControlStore {
     this.control = wrapper;
   }
 
-  setControlList(controlList: Array<CreateControlDTO>) {
+  setControlList(controlList: Array<ListControlDTO>) {
     this.controlList = {
       data: controlList,
       firstLoad: false,
@@ -125,7 +177,7 @@ class ControlStore {
     };
   }
 
-  setControlListWrapper(wrapper: UIWrapper<Array<CreateControlDTO>>) {
+  setControlListWrapper(wrapper: UIWrapper<Array<ListControlDTO>>) {
     this.controlList = wrapper;
   }
 
@@ -159,6 +211,11 @@ class ControlStore {
 
   setTemperaturas(temperaturas: Array<TemperaturaCamaDTO>) {
     this.control.data.temperaturas = temperaturas;
+  }
+
+  setControlListFilterCriteria(filterCriteria: ControlFilterCriteria) {
+    this.controlListFilterCriteria = filterCriteria;
+    this.getControlListFromAPI();
   }
 
   setLoading(property: UIWrapper<any>) {
