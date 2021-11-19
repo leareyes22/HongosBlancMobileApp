@@ -17,3 +17,23 @@ export const emptyCreateCosechaDTO: CreateCosechaDTO = {
   id_personal: -1,
   id_turno: -1,
 };
+
+export interface CosechaFilterCriteria {
+  desde?: Date;
+  hasta?: Date;
+  producto?: number;
+  sala?: number;
+  personal?: number;
+  turno?: number;
+}
+
+export default interface ListCosechaDTO {
+  id?: number;
+  fecha_cosechada: Date;
+  producto: string;
+  kg_cosechados: number;
+  observaciones: string;
+  sala: string;
+  personal: string;
+  turno: string;
+}

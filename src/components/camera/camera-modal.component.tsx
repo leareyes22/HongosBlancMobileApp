@@ -7,7 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const CameraModal = (props: any) => {
   const takePicture = async function (camera: any) {
-    const options = { quality: 0.5, base64: true };
+    const options = { quality: 0.1, base64: true };
     const data = await camera.takePictureAsync(options);
     props.setFoto(data);
     props.setShowCam(false);

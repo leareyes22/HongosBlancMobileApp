@@ -1,4 +1,7 @@
-import { emptyCreateCosechaDTO } from '../../../models/cosecha';
+// eslint-disable-next-line no-unused-vars
+import CreateCosechaDTO, {
+  emptyCreateCosechaDTO,
+} from '../../../models/cosecha';
 import CosechaStore from '../../../stores/cosecha.store';
 
 const createLocalObservable = () => ({
@@ -17,12 +20,19 @@ const createLocalObservable = () => ({
   setSubmitted(submitted: boolean) {
     this.submitted = submitted;
   },
+  setCosecha(cosecha: CreateCosechaDTO) {
+    this.cosecha = cosecha;
+  },
   submitHandler() {
     CosechaStore.createCosecha({
       ...CosechaStore.cosecha.data,
       fecha_cosechada: new Date(),
     });
     this.setSubmitted(true);
+    setTimeout(() => {
+      this.setSubmitted(false);
+    }, 5000);
+    this.setCosecha(emptyCreateCosechaDTO);
   },
 });
 

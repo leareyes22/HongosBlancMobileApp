@@ -215,6 +215,7 @@ const TemperaturasScreen = ({ navigation }: any) => {
                 localObservable.pushTemp(localObservable.tempActual);
                 localObservable.saveTemperaturas();
                 navigation.navigate('CargarDatos');
+                localObservable.setNroCamaActual(1);
               } else {
                 localObservable.increaseNroCamaActual();
               }
