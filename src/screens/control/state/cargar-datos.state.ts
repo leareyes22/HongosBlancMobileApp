@@ -1,4 +1,7 @@
-import { emptyCreateControlDTO } from '../../../models/control';
+// eslint-disable-next-line no-unused-vars
+import CreateControlDTO, {
+  emptyCreateControlDTO,
+} from '../../../models/control';
 import ControlStore from '../../../stores/control.store';
 
 const createLocalObservable = () => ({
@@ -25,12 +28,19 @@ const createLocalObservable = () => ({
   setSubmitted(submitted: boolean) {
     this.submitted = submitted;
   },
+  setControl(control: CreateControlDTO) {
+    this.control = control;
+  },
   submitHandler() {
     ControlStore.createControl({
       ...ControlStore.control.data,
       fecha_control: new Date(),
     });
     this.setSubmitted(true);
+    setTimeout(() => {
+      this.setSubmitted(false);
+    }, 5000);
+    this.setControl(emptyCreateControlDTO);
   },
 });
 

@@ -6,12 +6,12 @@ import {
   Pressable,
   Text,
   Modal,
-  Image,
   Heading,
   Box,
 } from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ControlStore from '../../stores/control.store';
+import FastImage from 'react-native-fast-image';
 
 const ControlFotosModal = (props: any) => {
   const [showModal, setShowModal] = useState(false);
@@ -26,8 +26,7 @@ const ControlFotosModal = (props: any) => {
   }
 
   async function setData() {
-    let images = await ControlStore.getControlImages(props.controlId);
-    setControlImages(images);
+    setControlImages(await ControlStore.getControlImages(props.controlId));
   }
 
   useEffect(() => {
@@ -70,13 +69,17 @@ const ControlFotosModal = (props: any) => {
                   return (
                     <Box key={index} alignItems="center">
                       <Heading>{'Cama ' + (index + 1)}</Heading>
-                      <Image
+                      <FastImage
+                        style={{
+                          width: 120,
+                          height: 120,
+                          borderRadius: 12,
+                        }}
                         source={{
                           uri: controlImages[index],
+                          priority: FastImage.priority.normal,
                         }}
-                        alt="Alternate Text"
-                        size={'xl'}
-                        borderRadius="12px"
+                        resizeMode={FastImage.resizeMode.cover}
                       />
                     </Box>
                   );

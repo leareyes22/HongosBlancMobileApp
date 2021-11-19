@@ -85,7 +85,7 @@ const ListadoCosechasScreen = () => {
             renderItem={renderItem}
             // eslint-disable-next-line react/jsx-no-bind
             renderHiddenItem={renderHiddenItem}
-            rightOpenValue={-130}
+            rightOpenValue={-60}
             previewRowKey={'1'}
             previewOpenValue={-40}
             previewOpenDelay={3000}
