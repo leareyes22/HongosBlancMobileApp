@@ -2,7 +2,8 @@ import React, { Fragment } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import SessionStore from '../stores/session.store';
 import LoginScreen from '../screens/login/login.screen';
-import TabBar from './tab-bar';
+import TabAdminBar from './tab-admin-bar';
+import TabEmpleadoBar from './tab-empleado-bar';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -14,6 +15,7 @@ import ConsultarUsuariosScreen from '../screens/usuarios/consultar-usuarios.scre
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import TabJefeBar from './tab-jefe-bar';
 
 //Navegación para el usuario que no está logueado.
 const AuthStackNav = createStackNavigator();
@@ -54,36 +56,66 @@ const AppDrawer = () => {
         contentContainerStyle: { backgroundColor: '#b45309' },
         labelStyle: { color: '#FFFFFF' },
       }}>
-      <AppDrawerNav.Screen
-        name="Home"
-        component={TabBar}
-        options={{
-          // eslint-disable-next-line react/display-name
-          drawerIcon: () => (
-            <Ionicons name="home" color={'#FFFFFF'} size={26} />
-          ),
-        }}
-      />
-      <AppDrawerNav.Screen
-        name="Registrar Usuario"
-        component={RegistrarUsuarioScreen}
-        options={{
-          // eslint-disable-next-line react/display-name
-          drawerIcon: () => (
-            <Ionicons name="person-add" color={'#FFFFFF'} size={26} />
-          ),
-        }}
-      />
-      <AppDrawerNav.Screen
-        name="Consultar Usuarios"
-        component={ConsultarUsuariosScreen}
-        options={{
-          // eslint-disable-next-line react/display-name
-          drawerIcon: () => (
-            <FontAwesome name="users" color={'#FFFFFF'} size={26} />
-          ),
-        }}
-      />
+      {SessionStore.role === 'admin' && (
+        <AppDrawerNav.Screen
+          name="Home"
+          component={TabAdminBar}
+          options={{
+            // eslint-disable-next-line react/display-name
+            drawerIcon: () => (
+              <Ionicons name="home" color={'#FFFFFF'} size={26} />
+            ),
+          }}
+        />
+      )}
+      {SessionStore.role === 'jefe' && (
+        <AppDrawerNav.Screen
+          name="Home"
+          component={TabJefeBar}
+          options={{
+            // eslint-disable-next-line react/display-name
+            drawerIcon: () => (
+              <Ionicons name="home" color={'#FFFFFF'} size={26} />
+            ),
+          }}
+        />
+      )}
+      {SessionStore.role === 'empleado' && (
+        <AppDrawerNav.Screen
+          name="Home"
+          component={TabEmpleadoBar}
+          options={{
+            // eslint-disable-next-line react/display-name
+            drawerIcon: () => (
+              <Ionicons name="home" color={'#FFFFFF'} size={26} />
+            ),
+          }}
+        />
+      )}
+      {SessionStore.role === 'admin' && (
+        <>
+          <AppDrawerNav.Screen
+            name="Registrar Usuario"
+            component={RegistrarUsuarioScreen}
+            options={{
+              // eslint-disable-next-line react/display-name
+              drawerIcon: () => (
+                <Ionicons name="person-add" color={'#FFFFFF'} size={26} />
+              ),
+            }}
+          />
+          <AppDrawerNav.Screen
+            name="Consultar Usuarios"
+            component={ConsultarUsuariosScreen}
+            options={{
+              // eslint-disable-next-line react/display-name
+              drawerIcon: () => (
+                <FontAwesome name="users" color={'#FFFFFF'} size={26} />
+              ),
+            }}
+          />
+        </>
+      )}
     </AppDrawerNav.Navigator>
   );
 };
@@ -112,13 +144,13 @@ const RootStack = (props: any) => {
           />
         </Fragment>
       ) : (
-        <>
+        <Fragment>
           <RootStackNav.Screen
             options={{ headerShown: false }}
             name="Auth"
             component={AuthStack}
           />
-        </>
+        </Fragment>
       )}
     </RootStackNav.Navigator>
   );
