@@ -1,11 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { Box, HStack, Icon, IconButton, StatusBar, Text } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
 
 const AppBar = () => {
-  const navigation = useNavigation();
-
   return (
     <Box>
       <StatusBar backgroundColor="#3700B3" barStyle="light-content" />
