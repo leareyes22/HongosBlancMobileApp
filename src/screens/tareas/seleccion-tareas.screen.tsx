@@ -14,7 +14,7 @@ const SeleccionTareasScreen = ({ navigation }: any) => {
           _text={{ color: 'white' }}
           // eslint-disable-next-line react/jsx-no-bind
           onPress={() => {
-            //navigation.navigate('ListadoControles');
+            navigation.navigate('AsignacionTareas');
           }}>
           Asignación de tareas
         </Button>
@@ -25,7 +25,16 @@ const SeleccionTareasScreen = ({ navigation }: any) => {
           onPress={() => {
             //navigation.navigate('ListadoCosechas');
           }}>
-          Listado de tareas
+          Listado de tareas semanales
+        </Button>
+        <Button
+          bg="primary.900"
+          _text={{ color: 'white' }}
+          // eslint-disable-next-line react/jsx-no-bind
+          onPress={() => {
+            //navigation.navigate('ListadoCosechas');
+          }}>
+          Listado de tareas diarias
         </Button>
       </VStack>
     </Box>

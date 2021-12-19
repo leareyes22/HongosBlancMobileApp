@@ -16,7 +16,13 @@ const CameraModal = (props: any) => {
   return (
     <Container style={styles.container}>
       <Modal isOpen={props.showCam}>
-        <RNCamera style={styles.preview} type={RNCamera.Constants.Type.back}>
+        <RNCamera
+          style={styles.preview}
+          type={
+            props.side === 'front'
+              ? RNCamera.Constants.Type.front
+              : RNCamera.Constants.Type.back
+          }>
           {({ camera, status }) => {
             if (status !== 'READY') return <PendingView />;
             return (
@@ -38,7 +44,7 @@ const CameraModal = (props: any) => {
                       size={26}
                     />
                   }>
-                  Tomar foto
+                  {props.header}
                 </Button>
               </View>
             );

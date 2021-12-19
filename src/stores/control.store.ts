@@ -62,6 +62,7 @@ class ControlStore {
       data.append('image', item);
       try {
         const r = await API.post(`/control/image/${controlId}`, data);
+        console.log(r);
         if (r.status === StatusCodes.OK) {
           this.setControlWrapper(this.unsetLoading(this.control));
         } else {

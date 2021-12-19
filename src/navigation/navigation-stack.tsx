@@ -16,6 +16,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import TabJefeBar from './tab-jefe-bar';
+import PerfilUsuarioScreen from '../screens/usuarios/perfil-usuario.screen';
 
 //Navegación para el usuario que no está logueado.
 const AuthStackNav = createStackNavigator();
@@ -33,7 +34,7 @@ function CustomDrawerContent(props: any) {
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props} />
       <DrawerItem
-        label="Cerrar Sesión"
+        label="Cerrar sesión"
         labelStyle={{ color: '#FFFFFF' }}
         onPress={logout}
         // eslint-disable-next-line react/jsx-no-bind
@@ -92,10 +93,20 @@ const AppDrawer = () => {
           }}
         />
       )}
+      <AppDrawerNav.Screen
+        name="Perfil de usuario"
+        component={PerfilUsuarioScreen}
+        options={{
+          // eslint-disable-next-line react/display-name
+          drawerIcon: () => (
+            <Ionicons name="person" color={'#FFFFFF'} size={26} />
+          ),
+        }}
+      />
       {SessionStore.role === 'admin' && (
         <>
           <AppDrawerNav.Screen
-            name="Registrar Usuario"
+            name="Registrar usuario"
             component={RegistrarUsuarioScreen}
             options={{
               // eslint-disable-next-line react/display-name
@@ -105,7 +116,7 @@ const AppDrawer = () => {
             }}
           />
           <AppDrawerNav.Screen
-            name="Consultar Usuarios"
+            name="Consultar usuarios"
             component={ConsultarUsuariosScreen}
             options={{
               // eslint-disable-next-line react/display-name
