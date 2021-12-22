@@ -75,16 +75,16 @@ const PerfilUsuarioScreen = () => {
           header={'Tomar foto'}
           side={'front'}
         />
-        <Text pl={2} fontSize="lg" color="primary.800">
+        <Text pl={2} pr={2} fontSize="lg" color="primary.800">
           {'Nombre: ' + UsuarioStore.usuarioFinded.data.nombre}
         </Text>
-        <Text pl={2} fontSize="lg" color="primary.800">
+        <Text pl={2} pr={2} fontSize="lg" color="primary.800">
           {'Apellido: ' + UsuarioStore.usuarioFinded.data.apellido}
         </Text>
-        <Text pl={2} fontSize="lg" color="primary.800">
+        <Text pl={2} pr={2} fontSize="lg" color="primary.800">
           {'Email: ' + UsuarioStore.usuarioFinded.data.email}
         </Text>
-        <Text pl={2} fontSize="lg" color="primary.800">
+        <Text pl={2} pr={2} fontSize="lg" color="primary.800">
           {'Rol: ' + UsuarioStore.usuarioFinded.data.rol}
         </Text>
       </VStack>

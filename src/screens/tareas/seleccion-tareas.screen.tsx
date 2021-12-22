@@ -1,5 +1,6 @@
 import { Box, Button, Image, VStack } from 'native-base';
 import React from 'react';
+import SessionStore from '../../stores/session.store';
 const logo = require('../../assets/Logo-HongosBlanc.png');
 
 const SeleccionTareasScreen = ({ navigation }: any) => {
@@ -9,32 +10,34 @@ const SeleccionTareasScreen = ({ navigation }: any) => {
         <Image alt="Alternate Text" source={logo} size="2xl" />
       </Box>
       <VStack space={4}>
+        {(SessionStore.role === 'jefe' || SessionStore.role === 'admin') && (
+          <Button
+            bg="primary.900"
+            _text={{ color: 'white' }}
+            // eslint-disable-next-line react/jsx-no-bind
+            onPress={() => {
+              navigation.navigate('AsignacionTareas');
+            }}>
+            Asignación de tareas
+          </Button>
+        )}
         <Button
           bg="primary.900"
           _text={{ color: 'white' }}
           // eslint-disable-next-line react/jsx-no-bind
           onPress={() => {
-            navigation.navigate('AsignacionTareas');
-          }}>
-          Asignación de tareas
-        </Button>
-        <Button
-          bg="primary.900"
-          _text={{ color: 'white' }}
-          // eslint-disable-next-line react/jsx-no-bind
-          onPress={() => {
-            //navigation.navigate('ListadoCosechas');
-          }}>
-          Listado de tareas semanales
-        </Button>
-        <Button
-          bg="primary.900"
-          _text={{ color: 'white' }}
-          // eslint-disable-next-line react/jsx-no-bind
-          onPress={() => {
-            //navigation.navigate('ListadoCosechas');
+            navigation.navigate('TareasDiarias');
           }}>
           Listado de tareas diarias
+        </Button>
+        <Button
+          bg="primary.900"
+          _text={{ color: 'white' }}
+          // eslint-disable-next-line react/jsx-no-bind
+          onPress={() => {
+            navigation.navigate('TareasSemanales');
+          }}>
+          Listado de tareas semanales
         </Button>
       </VStack>
     </Box>

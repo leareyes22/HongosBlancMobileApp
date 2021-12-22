@@ -3,6 +3,9 @@ import { observer } from 'mobx-react-lite';
 import { createStackNavigator } from '@react-navigation/stack';
 import SeleccionTareasScreen from './seleccion-tareas.screen';
 import AsignacionTareasScreen from './asignacion-tareas.screen';
+import SessionStore from '../../stores/session.store';
+import TareasDiariasEmpleadoScreen from './tareas-diarias-empleado.screen';
+import TareasSemanalesEmpleadoScreen from './tareas-semanales-empleado.screen';
 
 const TareasStackNav = createStackNavigator();
 
@@ -19,6 +22,20 @@ const TareasStack = () => {
         name="AsignacionTareas"
         component={AsignacionTareasScreen}
       />
+      {SessionStore.role === 'empleado' && (
+        <TareasStackNav.Screen
+          options={{ headerShown: false }}
+          name="TareasDiarias"
+          component={TareasDiariasEmpleadoScreen}
+        />
+      )}
+      {SessionStore.role === 'empleado' && (
+        <TareasStackNav.Screen
+          options={{ headerShown: false }}
+          name="TareasSemanales"
+          component={TareasSemanalesEmpleadoScreen}
+        />
+      )}
     </TareasStackNav.Navigator>
   );
 };

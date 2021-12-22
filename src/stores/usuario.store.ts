@@ -93,7 +93,6 @@ class UsuarioStore {
     try {
       const r = await API.delete(`/user/${userId}`);
       if (r.status === StatusCodes.OK) {
-        console.log(r.data);
         Alert.alert('Atención!', r.data, [
           {
             text: 'OK',

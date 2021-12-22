@@ -1,16 +1,22 @@
 import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { makeAutoObservable } from 'mobx';
+import { Alert } from 'react-native';
 import { emptyCreateTareaDTO } from '../models/tarea';
 //import { adtTarea, getDBConnection } from '../database/database';
 // eslint-disable-next-line no-unused-vars
 import { CreateTareaDTO } from '../models/tarea';
+// eslint-disable-next-line no-unused-vars
+import TareaDTO from '../models/tarea-list';
 // eslint-disable-next-line no-unused-vars
 import { initialUIWrapper, UIWrapper } from '../models/ui-wrapper';
 import API from '../util/api';
 
 class TareaStore {
   tarea: UIWrapper<CreateTareaDTO> = initialUIWrapper(emptyCreateTareaDTO);
-  tareaList: UIWrapper<Array<CreateTareaDTO>> = initialUIWrapper([]);
+  tareasDiariasEmpleadoList: UIWrapper<Array<TareaDTO>> = initialUIWrapper([]);
+  tareasSemanalesEmpleadoList: UIWrapper<Array<TareaDTO>> = initialUIWrapper(
+    [],
+  );
 
   //Filter criteria
   //tareaListFilterCriteria:tTareaFilterCriteria = {};
@@ -33,25 +39,91 @@ class TareaStore {
     }
   }
 
-  /*async getTareaListFromAPI() {
-    this.setTareaListWrapper(this.setLoading(thistTareaList));
+  async getTareasDiariasEmpleadoListFromAPI(
+    fecha: Date,
+    id_personal_asignado: number,
+  ) {
+    this.setTareasDiariasEmpleadoListWrapper(
+      this.setLoading(this.tareasDiariasEmpleadoList),
+    );
     try {
-      const r = await API.get(`tTarea/list`, {
+      const r = await API.get(`/tareas_dia_empleado/list`, {
         params: {
-          ...thisTareaListFilterCriteria,
+          fecha: fecha,
+          personal: id_personal_asignado,
         },
       });
       if (r.status === StatusCodes.OK) {
-        this.setTareaList(r.data);
+        this.setTareasDiariasEmpleadoList(r.data);
       } else {
-        this.setTareaListWrapper(this.setError(thistTareaList, r.status));
+        this.setTareasDiariasEmpleadoListWrapper(
+          this.setError(this.tareasDiariasEmpleadoList, r.status),
+        );
       }
     } catch (e) {
-      this.setTareaListWrapper(
-        this.setError(thistTareaList, e.response.status),
+      this.setTareasDiariasEmpleadoListWrapper(
+        this.setError(this.tareasDiariasEmpleadoList, e.response.status),
       );
     }
-  }*/
+  }
+
+  async getTareasSemanalesEmpleadoListFromAPI(
+    fecha: Date,
+    id_personal_asignado: number,
+  ) {
+    this.setTareasSemanalesEmpleadoListWrapper(
+      this.setLoading(this.tareasSemanalesEmpleadoList),
+    );
+    try {
+      const r = await API.get(`/tareas_semana_empleado/list`, {
+        params: {
+          fecha: fecha,
+          personal: id_personal_asignado,
+        },
+      });
+      if (r.status === StatusCodes.OK) {
+        this.setTareasSemanalesEmpleadoList(r.data);
+      } else {
+        this.setTareasSemanalesEmpleadoListWrapper(
+          this.setError(this.tareasSemanalesEmpleadoList, r.status),
+        );
+      }
+    } catch (e) {
+      this.setTareasSemanalesEmpleadoListWrapper(
+        this.setError(this.tareasSemanalesEmpleadoList, e.response.status),
+      );
+    }
+  }
+
+  async realizarTarea(id_tarea: number) {
+    this.setTareaWrapper(this.setLoading(this.tarea));
+    try {
+      const r = await API.put(`/realizar_tarea/${id_tarea}`, {});
+      if (r.status === StatusCodes.OK) {
+        Alert.alert('Atención!', r.data, [
+          {
+            text: 'OK',
+            style: 'default',
+          },
+        ]);
+        this.setTareaWrapper(this.unsetLoading(this.tarea));
+      } else {
+        this.setTareaWrapper(this.setError(this.tarea, r.status));
+      }
+    } catch (e) {
+      Alert.alert('Error!', e.response.status, [
+        {
+          text: 'OK',
+          style: 'default',
+        },
+      ]);
+      this.setTareaWrapper(this.setError(this.tarea, e.response.status));
+    }
+  }
+
+  setTareaWrapper(wrapper: UIWrapper<CreateTareaDTO>) {
+    this.tarea = wrapper;
+  }
 
   setTarea(tarea: CreateTareaDTO) {
     this.tarea = {
@@ -63,13 +135,13 @@ class TareaStore {
     };
   }
 
-  setTareaWrapper(wrapper: UIWrapper<CreateTareaDTO>) {
-    this.tarea = wrapper;
+  setTareasDiariasEmpleadoListWrapper(wrapper: UIWrapper<Array<TareaDTO>>) {
+    this.tareasDiariasEmpleadoList = wrapper;
   }
 
-  /*setTareaListtTareaList: Array<CreateTareaDTO>) {
-    thistTareaList = {
-      data:tTareaList,
+  setTareasDiariasEmpleadoList(tareasDiariasEmpleadoList: Array<TareaDTO>) {
+    this.tareasDiariasEmpleadoList = {
+      data: tareasDiariasEmpleadoList,
       firstLoad: false,
       loading: false,
       hasData: true,
@@ -77,11 +149,21 @@ class TareaStore {
     };
   }
 
-  setTareaListWrapper(wrapper: UIWrapper<Array<CreattTareaDTO>>) {
-    thistTareaList = wrapper;
+  setTareasSemanalesEmpleadoListWrapper(wrapper: UIWrapper<Array<TareaDTO>>) {
+    this.tareasSemanalesEmpleadoList = wrapper;
   }
 
-  setTareaListFilterCriteria(filterCriteria:tTareaFilterCriteria) {
+  setTareasSemanalesEmpleadoList(tareasSemanalesEmpleadoList: Array<TareaDTO>) {
+    this.tareasSemanalesEmpleadoList = {
+      data: tareasSemanalesEmpleadoList,
+      firstLoad: false,
+      loading: false,
+      hasData: true,
+      hasError: false,
+    };
+  }
+
+  /*setTareaListFilterCriteria(filterCriteria:tTareaFilterCriteria) {
     thistTareaListFilterCriteria = filterCriteria;
     this.getTareaListFromAPI();
   }*/
