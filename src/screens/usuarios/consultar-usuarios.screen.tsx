@@ -58,7 +58,7 @@ const ConsultarUsuariosScreen = () => {
           <HStack alignItems="center" space={3}>
             <VStack>
               <Text color="#000000" _dark={{ color: '#000000' }} bold>
-                {item.username}
+                {item.nombre + ' ' + item.apellido}
               </Text>
               <Text color="#000000" _dark={{ color: '#000000' }}>
                 {item.rol}
@@ -108,7 +108,7 @@ const ConsultarUsuariosScreen = () => {
     <SafeAreaView style={{ backgroundColor: '#d6d3d1', height: '100%' }}>
       <VStack space={2} mt={5}>
         <Heading pl={2} size="lg" color="primary.800">
-          Consultar Usuarios
+          Consultar usuarios
         </Heading>
         {UsuarioStore.usuariosList.loading && (
           <HStack space={2} mt={5} alignItems="center" ml="5">

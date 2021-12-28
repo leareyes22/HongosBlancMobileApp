@@ -3,8 +3,6 @@ import {
   CreateUsuarioDTO,
   emptyCreateUsuario,
 } from '../../../models/create-usuario';
-// eslint-disable-next-line no-unused-vars
-import RolDTO from '../../../models/rol';
 import UsuarioStore from '../../../stores/usuario.store';
 import RolStore from '../../../stores/rol.store';
 
@@ -27,6 +25,15 @@ const createLocalObservable = () => ({
   },
   setRepeatPassword(repeatPassword: string) {
     this.repeatPassword = repeatPassword;
+  },
+  setEmail(email: string) {
+    this.usuario.email = email;
+  },
+  setNombre(nombre: string) {
+    this.usuario.nombre = nombre;
+  },
+  setApellido(apellido: string) {
+    this.usuario.apellido = apellido;
   },
   handleRolSelect(itemValue: any) {
     this.setIdRol(itemValue);

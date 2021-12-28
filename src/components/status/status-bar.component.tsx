@@ -22,6 +22,8 @@ import {
   updateTemperaturaItems,
 } from '../../database/database';
 import { Alert } from 'react-native';
+import TareaStore from '../../stores/tareas.store';
+import PushNotification from 'react-native-push-notification';
 
 const StatusBar = () => {
   const syncDataCallBack = useCallback(async () => {
@@ -94,7 +96,24 @@ const StatusBar = () => {
             [
               {
                 text: 'Confirmar',
-                onPress: () => syncDataCallBack(),
+                onPress: () => {
+                  syncDataCallBack();
+                  TareaStore.getTareasDiariasEmpleadoListFromAPI(
+                    new Date(),
+                    SessionStore.user_id,
+                  ).then(() => {
+                    if (TareaStore.tareasDiariasEmpleadoList.data.length > 0) {
+                      PushNotification.localNotification({
+                        channelId: 'hongosblanc-channel-id',
+                        title: 'Notificación de tareas',
+                        message:
+                          'Usted tiene asignadas ' +
+                          TareaStore.tareasDiariasEmpleadoList.data.length +
+                          ' tareas para este día. Acceda a la sección de Tareas para más detalles.',
+                      });
+                    }
+                  });
+                },
               },
             ],
           );

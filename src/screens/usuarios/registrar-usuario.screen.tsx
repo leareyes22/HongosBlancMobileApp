@@ -38,7 +38,7 @@ const RegistrarUsuarioScreen = () => {
       <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">
         <VStack space={4} mt={5}>
           <Heading size="lg" color="primary.800">
-            Registrar Usuario
+            Registrar usuario
           </Heading>
           <FormControl
             isInvalid={
@@ -119,6 +119,81 @@ const RegistrarUsuarioScreen = () => {
               />
               <FormControl.ErrorMessage>
                 Debe repetir la contraseña.
+              </FormControl.ErrorMessage>
+            </FormControl>
+            <FormControl
+              pb="10px"
+              isRequired
+              isInvalid={
+                localObservable.usuario.email === '' &&
+                localObservable.submitted &&
+                !localObservable.success
+              }>
+              <FormControl.Label
+                _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
+                Email
+              </FormControl.Label>
+              <Input
+                type="text"
+                onChangeText={localObservable.setEmail}
+                borderColor="primary.900"
+                _dark={{
+                  color: '#000000',
+                }}
+                value={localObservable.usuario.email}
+              />
+              <FormControl.ErrorMessage>
+                Debe ingresar un email.
+              </FormControl.ErrorMessage>
+            </FormControl>
+            <FormControl
+              pb="10px"
+              isRequired
+              isInvalid={
+                localObservable.usuario.nombre === '' &&
+                localObservable.submitted &&
+                !localObservable.success
+              }>
+              <FormControl.Label
+                _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
+                Nombre
+              </FormControl.Label>
+              <Input
+                type="text"
+                onChangeText={localObservable.setNombre}
+                borderColor="primary.900"
+                _dark={{
+                  color: '#000000',
+                }}
+                value={localObservable.usuario.nombre}
+              />
+              <FormControl.ErrorMessage>
+                Debe ingresar un nombre.
+              </FormControl.ErrorMessage>
+            </FormControl>
+            <FormControl
+              pb="10px"
+              isRequired
+              isInvalid={
+                localObservable.usuario.apellido === '' &&
+                localObservable.submitted &&
+                !localObservable.success
+              }>
+              <FormControl.Label
+                _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
+                Apellido
+              </FormControl.Label>
+              <Input
+                type="text"
+                onChangeText={localObservable.setApellido}
+                borderColor="primary.900"
+                _dark={{
+                  color: '#000000',
+                }}
+                value={localObservable.usuario.apellido}
+              />
+              <FormControl.ErrorMessage>
+                Debe ingresar un apellido.
               </FormControl.ErrorMessage>
             </FormControl>
             <FormControl

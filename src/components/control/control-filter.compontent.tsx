@@ -133,6 +133,7 @@ const ControlFilterModal = () => {
                   is24Hour={true}
                   display="default"
                   onChange={onToDateChange}
+                  minimumDate={fromDate}
                 />
               )}
               <FormControl mb={1}>

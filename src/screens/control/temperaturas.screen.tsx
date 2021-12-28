@@ -167,6 +167,8 @@ const TemperaturasScreen = ({ navigation }: any) => {
           showCam={localObservable.showCam}
           setShowCam={localObservable.setShowCam}
           setFoto={localObservable.setFoto}
+          header={'Tomar foto'}
+          side={'back'}
         />
         {ControlStore.controlImage !== '' && (
           <VStack space={2} alignItems="center" safeAreaTop my={6}>

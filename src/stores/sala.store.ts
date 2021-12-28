@@ -2,10 +2,11 @@ import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 // eslint-disable-next-line no-unused-vars
 import { action, makeAutoObservable } from 'mobx';
 // eslint-disable-next-line no-unused-vars
-import { SalaDTO, emptySalaDTO } from '../models/sala';
+import { SalaDTO, emptySalaDTO, salasOffline } from '../models/sala';
 // eslint-disable-next-line no-unused-vars
 import { initialUIWrapper, UIWrapper } from '../models/ui-wrapper';
 import API from '../util/api';
+import SessionStore from './session.store';
 
 class SalaStore {
   sala: UIWrapper<SalaDTO> = initialUIWrapper(emptySalaDTO);
@@ -17,17 +18,27 @@ class SalaStore {
 
   async getSalasListFromAPI() {
     this.setSalasListWrapper(this.setLoading(this.salasList));
-    try {
-      const r = await API.get(`/sala/list`);
-      if (r.status === StatusCodes.OK) {
-        this.setSalasList(r.data);
-      } else {
-        this.setSalasListWrapper(this.setError(this.salasList, r.status));
+    if (SessionStore.isOnline) {
+      try {
+        const r = await API.get(`/sala/list`);
+        if (r.status === StatusCodes.OK) {
+          this.setSalasList(r.data);
+        } else {
+          this.setSalasListWrapper(this.setError(this.salasList, r.status));
+        }
+      } catch (e) {
+        this.setSalasListWrapper(
+          this.setError(this.salasList, e.response.status),
+        );
       }
-    } catch (e) {
-      this.setSalasListWrapper(
-        this.setError(this.salasList, e.response.status),
-      );
+    } else {
+      try {
+        this.setSalasList(salasOffline);
+      } catch (e) {
+        this.setSalasListWrapper(
+          this.setError(this.salasList, e.response.status),
+        );
+      }
     }
   }
 

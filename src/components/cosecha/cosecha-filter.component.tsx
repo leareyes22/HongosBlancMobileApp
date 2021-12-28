@@ -24,6 +24,7 @@ import { CosechaFilterCriteria } from '../../models/cosecha';
 import ProductoStore from '../../stores/producto.store';
 // eslint-disable-next-line no-unused-vars
 import ProductoDTO from '../../models/producto';
+import _ from 'lodash';
 
 const CosechaFilterModal = () => {
   const [showModal, setShowModal] = useState(false);
@@ -52,17 +53,23 @@ const CosechaFilterModal = () => {
   }
 
   function onFromDateChange(event: any, selectedDate: any) {
-    const currentDate = selectedDate;
     setShowFromDatePicker(false);
-    setFromDate(currentDate);
-    setFilterCriteria({ ...filterCriteria, desde: currentDate });
+    if (!_.isUndefined(selectedDate)) {
+      setFromDate(selectedDate);
+      setFilterCriteria({ ...filterCriteria, desde: selectedDate });
+    } else {
+      setFromDate(new Date());
+    }
   }
 
   function onToDateChange(event: any, selectedDate: any) {
-    const currentDate = selectedDate;
     setShowToDatePicker(false);
-    setToDate(currentDate);
-    setFilterCriteria({ ...filterCriteria, hasta: currentDate });
+    if (!_.isUndefined(selectedDate)) {
+      setToDate(selectedDate);
+      setFilterCriteria({ ...filterCriteria, hasta: selectedDate });
+    } else {
+      setFromDate(new Date());
+    }
   }
 
   function handleSalaSelect(itemValue: any) {
@@ -141,6 +148,7 @@ const CosechaFilterModal = () => {
                   is24Hour={true}
                   display="default"
                   onChange={onToDateChange}
+                  minimumDate={fromDate}
                 />
               )}
               <FormControl mb={1}>
