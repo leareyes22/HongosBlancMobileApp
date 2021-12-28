@@ -13,10 +13,14 @@ import API from '../util/api';
 
 class TareaStore {
   tarea: UIWrapper<CreateTareaDTO> = initialUIWrapper(emptyCreateTareaDTO);
+  //Tareas empleado
   tareasDiariasEmpleadoList: UIWrapper<Array<TareaDTO>> = initialUIWrapper([]);
   tareasSemanalesEmpleadoList: UIWrapper<Array<TareaDTO>> = initialUIWrapper(
     [],
   );
+  //Tareas jefe o admin
+  tareasDiariasJefeList: UIWrapper<Array<TareaDTO>> = initialUIWrapper([]);
+  tareasSemanalesJefeList: UIWrapper<Array<TareaDTO>> = initialUIWrapper([]);
 
   //Filter criteria
   //tareaListFilterCriteria:tTareaFilterCriteria = {};
@@ -95,6 +99,62 @@ class TareaStore {
     }
   }
 
+  async getTareasDiariasJefeListFromAPI(
+    fecha: Date,
+    id_personal_asignado: number,
+  ) {
+    this.setTareasDiariasJefeListWrapper(
+      this.setLoading(this.tareasDiariasJefeList),
+    );
+    try {
+      const r = await API.get(`/tareas_dia_jefe/list`, {
+        params: {
+          fecha: fecha,
+          personal: id_personal_asignado,
+        },
+      });
+      if (r.status === StatusCodes.OK) {
+        this.setTareasDiariasJefeList(r.data);
+      } else {
+        this.setTareasDiariasJefeListWrapper(
+          this.setError(this.tareasDiariasJefeList, r.status),
+        );
+      }
+    } catch (e) {
+      this.setTareasDiariasJefeListWrapper(
+        this.setError(this.tareasDiariasJefeList, e.response.status),
+      );
+    }
+  }
+
+  async getTareasSemanalesJefeListFromAPI(
+    fecha: Date,
+    id_personal_asignado: number,
+  ) {
+    this.setTareasSemanalesJefeListWrapper(
+      this.setLoading(this.tareasSemanalesJefeList),
+    );
+    try {
+      const r = await API.get(`/tareas_semana_jefe/list`, {
+        params: {
+          fecha: fecha,
+          personal: id_personal_asignado,
+        },
+      });
+      if (r.status === StatusCodes.OK) {
+        this.setTareasSemanalesJefeList(r.data);
+      } else {
+        this.setTareasSemanalesJefeListWrapper(
+          this.setError(this.tareasSemanalesJefeList, r.status),
+        );
+      }
+    } catch (e) {
+      this.setTareasSemanalesJefeListWrapper(
+        this.setError(this.tareasSemanalesJefeList, e.response.status),
+      );
+    }
+  }
+
   async realizarTarea(id_tarea: number) {
     this.setTareaWrapper(this.setLoading(this.tarea));
     try {
@@ -149,6 +209,20 @@ class TareaStore {
     };
   }
 
+  setTareasDiariasJefeListWrapper(wrapper: UIWrapper<Array<TareaDTO>>) {
+    this.tareasDiariasJefeList = wrapper;
+  }
+
+  setTareasDiariasJefeList(tareasDiariasJefeList: Array<TareaDTO>) {
+    this.tareasDiariasJefeList = {
+      data: tareasDiariasJefeList,
+      firstLoad: false,
+      loading: false,
+      hasData: true,
+      hasError: false,
+    };
+  }
+
   setTareasSemanalesEmpleadoListWrapper(wrapper: UIWrapper<Array<TareaDTO>>) {
     this.tareasSemanalesEmpleadoList = wrapper;
   }
@@ -156,6 +230,20 @@ class TareaStore {
   setTareasSemanalesEmpleadoList(tareasSemanalesEmpleadoList: Array<TareaDTO>) {
     this.tareasSemanalesEmpleadoList = {
       data: tareasSemanalesEmpleadoList,
+      firstLoad: false,
+      loading: false,
+      hasData: true,
+      hasError: false,
+    };
+  }
+
+  setTareasSemanalesJefeListWrapper(wrapper: UIWrapper<Array<TareaDTO>>) {
+    this.tareasSemanalesJefeList = wrapper;
+  }
+
+  setTareasSemanalesJefeList(tareasSemanalesJefeList: Array<TareaDTO>) {
+    this.tareasSemanalesJefeList = {
+      data: tareasSemanalesJefeList,
       firstLoad: false,
       loading: false,
       hasData: true,

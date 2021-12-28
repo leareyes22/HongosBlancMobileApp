@@ -4,7 +4,7 @@ import { Icon, VStack, Pressable, Text, Modal } from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 
-const TareaEmpleadoModal = (props: any) => {
+const TareaJefeModal = (props: any) => {
   const [showModal, setShowModal] = useState(false);
 
   function onOpen() {
@@ -48,12 +48,10 @@ const TareaEmpleadoModal = (props: any) => {
               </Text>
               <Text>
                 {'Fecha planificada: ' +
-                  moment(props.tarea.fecha_planificada).format(
-                    'DD/MM/YYYY',
-                  )}
+                  moment(props.tarea.fecha_planificada).format('DD/MM/YYYY')}
               </Text>
               <Text>{'Sala: ' + props.tarea.sala}</Text>
-              <Text>{'Personal creador: ' + props.tarea.personal}</Text>
+              <Text>{'Personal asignado: ' + props.tarea.personal}</Text>
               <Text>
                 {'Realizada: ' + (props.tarea.realizada ? 'Si' : 'No')}
               </Text>
@@ -66,4 +64,4 @@ const TareaEmpleadoModal = (props: any) => {
   );
 };
 
-export default observer(TareaEmpleadoModal);
+export default observer(TareaJefeModal);

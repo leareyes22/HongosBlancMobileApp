@@ -16,8 +16,9 @@ import SessionStore from '../../stores/session.store';
 import SalaStore from '../../stores/sala.store';
 import TurnoStore from '../../stores/turno.store';
 // eslint-disable-next-line no-unused-vars
-import { SalaDTO } from '../../models/sala';
+import { emptySalaDTO, SalaDTO } from '../../models/sala';
 import CosechaStore from '../../stores/cosecha.store';
+import { emptyTurnoDTO } from '../../models/turno';
 
 const SeleccionSalaScreen = ({ navigation }: any) => {
   const [sala, setSala] = useState('');
@@ -25,6 +26,10 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
 
   useEffect(() => {
     SalaStore.getSalasListFromAPI();
+    SalaStore.setSala(emptySalaDTO);
+    TurnoStore.setTurno(emptyTurnoDTO);
+    setSala('');
+    setTurno('');
   }, []);
 
   function handleSalaSelect(itemValue: any) {
@@ -86,14 +91,6 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
               );
             })}
           </Select>
-        </FormControl>
-        <FormControl mb={5}>
-          <Text
-            _dark={{
-              color: '#000000',
-            }}>
-            {'Estado de sala: ' + SalaStore.sala.data.estado}
-          </Text>
         </FormControl>
         <FormControl mb={1}>
           <FormControl.Label
