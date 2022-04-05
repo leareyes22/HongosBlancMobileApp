@@ -6,6 +6,8 @@ import CreateCosechaDTO, {
   // eslint-disable-next-line no-unused-vars
   CosechaFilterCriteria,
   emptyCreateCosechaDTO,
+  // eslint-disable-next-line no-unused-vars
+  ListCosechaDTO,
 } from '../models/cosecha';
 // eslint-disable-next-line no-unused-vars
 import { initialUIWrapper, UIWrapper } from '../models/ui-wrapper';
@@ -16,7 +18,7 @@ class CosechaStore {
   cosecha: UIWrapper<CreateCosechaDTO> = initialUIWrapper(
     emptyCreateCosechaDTO,
   );
-  cosechaList: UIWrapper<Array<CreateCosechaDTO>> = initialUIWrapper([]);
+  cosechaList: UIWrapper<Array<ListCosechaDTO>> = initialUIWrapper([]);
 
   //Filter criteria
   cosechaListFilterCriteria: CosechaFilterCriteria = {};
@@ -83,7 +85,7 @@ class CosechaStore {
     this.cosecha = wrapper;
   }
 
-  setCosechaList(cosechaList: Array<CreateCosechaDTO>) {
+  setCosechaList(cosechaList: Array<ListCosechaDTO>) {
     this.cosechaList = {
       data: cosechaList,
       firstLoad: false,
@@ -93,7 +95,7 @@ class CosechaStore {
     };
   }
 
-  setCosechaListWrapper(wrapper: UIWrapper<Array<CreateCosechaDTO>>) {
+  setCosechaListWrapper(wrapper: UIWrapper<Array<ListCosechaDTO>>) {
     this.cosechaList = wrapper;
   }
 

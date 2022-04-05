@@ -46,13 +46,13 @@ const createLocalObservable = () => ({
     this.usuario.id_rol = id_rol;
   },
   editHandler() {
+    this.resetErrors();
     if (
       this.usuario.username !== '' &&
       this.usuario.password !== '' &&
       this.usuario.id_rol !== -1
     ) {
       UsuarioStore.editUser(this.usuario);
-      this.resetErrors();
     }
     if (this.usuario.username === '') {
       this.setUsernameRequiredError(true);

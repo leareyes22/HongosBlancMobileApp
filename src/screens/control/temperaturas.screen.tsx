@@ -46,12 +46,6 @@ const TemperaturasScreen = ({ navigation }: any) => {
           }}>
           {'Sala: ' + SalaStore.sala.data.nombre}
         </Text>
-        <Text
-          _dark={{
-            color: '#000000',
-          }}>
-          {'Estado: ' + SalaStore.sala.data.estado}
-        </Text>
       </VStack>
       <VStack space={2} mt={5}>
         <Heading size="lg" color="primary.800">

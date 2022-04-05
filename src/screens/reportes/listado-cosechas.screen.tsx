@@ -30,7 +30,7 @@ const ListadoCosechasScreen = () => {
           <HStack alignItems="center" space={3}>
             <VStack>
               <Text color="#000000" _dark={{ color: '#000000' }} bold pb="5">
-                {moment(item.fecha_control)
+                {moment(item.fecha_cosechada)
                   .locale('es')
                   .format('DD/MM/YYYY hh:mm')}
               </Text>
@@ -57,7 +57,7 @@ const ListadoCosechasScreen = () => {
 
   return (
     <SafeAreaView style={{ backgroundColor: '#d6d3d1', height: '100%' }}>
-      <VStack space={2} mt={5}>
+      <VStack space={2} mt={5} pb={'90px'}>
         <Heading pl={2} size="lg" color="primary.800">
           Listado de cosechas
         </Heading>

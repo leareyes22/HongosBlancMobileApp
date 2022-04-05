@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import {
   Alert,
-  Box,
   Button,
   FormControl,
   Heading,
   HStack,
   IconButton,
+  ScrollView,
   Spinner,
   TextArea,
   VStack,
@@ -25,14 +25,8 @@ const CargarDatosScreen = ({ navigation }: any) => {
     ControlStore.control.hasError,
   ]);
 
-  const loadDataButtonDisabled =
-    localObservable.control.temperatura_aire === 0.0 ||
-    localObservable.control.humedad_relativa === 0.0 ||
-    localObservable.control.co2 === 0.0 ||
-    localObservable.control.observaciones === '';
-
   return (
-    <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">
+    <ScrollView flex={1} p={2} w="100%" mx="auto" bg="primary.100">
       <VStack space={2} mt={5}>
         <Heading size="lg" color="primary.800">
           Cargar datos
@@ -40,7 +34,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
         <FormControl
           mb={1}
           isRequired
-          isInvalid={localObservable.control.temperatura_aire === 0}>
+          isInvalid={localObservable.tempAireError}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -69,7 +63,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
         <FormControl
           mb={1}
           isRequired
-          isInvalid={localObservable.control.humedad_relativa === 0}>
+          isInvalid={localObservable.humRelativaError}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -95,10 +89,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
             Debe ingresar un valor.
           </FormControl.ErrorMessage>
         </FormControl>
-        <FormControl
-          mb={1}
-          isRequired
-          isInvalid={localObservable.control.co2 === 0}>
+        <FormControl mb={1} isRequired isInvalid={localObservable.CO2Error}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -127,7 +118,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
         <FormControl
           mb={1}
           isRequired
-          isInvalid={localObservable.control.observaciones === ''}>
+          isInvalid={localObservable.observacionesError}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -141,6 +132,9 @@ const CargarDatosScreen = ({ navigation }: any) => {
             _dark={{
               color: '#000000',
             }}
+            _invalid={{
+              borderColor: 'red',
+            }}
             onChangeText={localObservable.observacionesHandler}
             placeholder="Ingrese las observaciones..."
             maxLength={250}
@@ -149,7 +143,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
         <LoadingMessage submitted={localObservable.submitted} />
         <SuccessMessage submitted={localObservable.submitted} />
         <ErrorMessage submitted={localObservable.submitted} />
-        <HStack space={120}>
+        <HStack space={120} mb={'10%'}>
           <IconButton
             bg="primary.800"
             variant="solid"
@@ -173,14 +167,14 @@ const CargarDatosScreen = ({ navigation }: any) => {
                 size={26}
               />
             }
-            disabled={localObservable.submitted || loadDataButtonDisabled}
+            disabled={localObservable.submitted}
             onPress={localObservable.submitHandler}
             flex={2}>
             Cargar datos
           </Button>
         </HStack>
       </VStack>
-    </Box>
+    </ScrollView>
   );
 };
 

@@ -10,6 +10,10 @@ const createLocalObservable = () => ({
 
   showFechaPlanificadaDatePicker: false,
 
+  descripcionError: false,
+  idSalaError: false,
+  idPersonalAsignadoError: false,
+
   setSubmitted(submitted: boolean) {
     this.submitted = submitted;
   },
@@ -33,6 +37,17 @@ const createLocalObservable = () => ({
     this.tarea.descripcion = descripcion;
   },
   submitHandler() {
+    this.resetErrors();
+    if (this.tarea.descripcion === '') {
+      this.setDescripcionError(true);
+      return;
+    } else if (this.tarea.id_sala === -1) {
+      this.setIdSalaError(true);
+      return;
+    } else if (this.tarea.id_personal_asignado === -1) {
+      this.setIdPersonalAsignadoError(true);
+      return;
+    }
     TareasStore.createTarea({
       ...this.tarea,
       fecha_generada: new Date(),
@@ -43,6 +58,20 @@ const createLocalObservable = () => ({
       this.setSubmitted(false);
       this.setTarea(emptyCreateTareaDTO);
     }, 5000);
+  },
+  setDescripcionError(error: boolean) {
+    this.descripcionError = error;
+  },
+  setIdSalaError(error: boolean) {
+    this.idSalaError = error;
+  },
+  setIdPersonalAsignadoError(error: boolean) {
+    this.idPersonalAsignadoError = error;
+  },
+  resetErrors() {
+    this.setDescripcionError(false);
+    this.setIdSalaError(false);
+    this.setIdPersonalAsignadoError(false);
   },
 });
 

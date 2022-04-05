@@ -84,7 +84,7 @@ const TareasDiariasJefeScreen = () => {
 
   return (
     <SafeAreaView style={{ backgroundColor: '#d6d3d1', height: '100%' }}>
-      <VStack p={2} space={2} mt={5}>
+      <VStack p={2} space={2} mt={5} pb={'90px'}>
         <Heading size="lg" color="primary.800">
           Tareas diarias creadas
         </Heading>

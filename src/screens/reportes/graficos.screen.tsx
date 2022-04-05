@@ -107,7 +107,7 @@ const GraficosScreen = () => {
                 />
               )}
               <Heading size="lg" color="primary.800">
-                Humedad relativa (%) promedio de los controles de los últimos 6
+                Humedad relativa promedio (%) de los controles de los últimos 6
                 meses en las salas
               </Heading>
               {ReportesStore.controlesData6meses.hasData && (
@@ -132,7 +132,7 @@ const GraficosScreen = () => {
                 />
               )}
               <Heading size="lg" color="primary.800">
-                CO2 (ppm) promedio de los controles de los últimos 6 meses en
+                CO2 promedio (ppm) de los controles de los últimos 6 meses en
                 las salas
               </Heading>
               {ReportesStore.controlesData6meses.hasData && (

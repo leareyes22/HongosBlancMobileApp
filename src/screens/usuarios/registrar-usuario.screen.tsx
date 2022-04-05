@@ -40,21 +40,11 @@ const RegistrarUsuarioScreen = () => {
           <Heading size="lg" color="primary.800">
             Registrar usuario
           </Heading>
-          <FormControl
-            isInvalid={
-              localObservable.repeatPassword !==
-                localObservable.usuario.password &&
-              localObservable.submitted &&
-              !localObservable.success
-            }>
+          <FormControl isInvalid={localObservable.matchError}>
             <FormControl
               pb="10px"
               isRequired
-              isInvalid={
-                localObservable.usuario.username === '' &&
-                localObservable.submitted &&
-                !localObservable.success
-              }>
+              isInvalid={localObservable.usernameError}>
               <FormControl.Label
                 _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
                 Nombre de usuario
@@ -65,6 +55,9 @@ const RegistrarUsuarioScreen = () => {
                 _dark={{
                   color: '#000000',
                 }}
+                _invalid={{
+                  borderColor: 'red',
+                }}
                 value={localObservable.usuario.username}
               />
               <FormControl.ErrorMessage>
@@ -74,11 +67,7 @@ const RegistrarUsuarioScreen = () => {
             <FormControl
               pb="10px"
               isRequired
-              isInvalid={
-                localObservable.usuario.password === '' &&
-                localObservable.submitted &&
-                !localObservable.success
-              }>
+              isInvalid={localObservable.emptyPasswordError}>
               <FormControl.Label
                 _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
                 Contraseña
@@ -90,6 +79,9 @@ const RegistrarUsuarioScreen = () => {
                 _dark={{
                   color: '#000000',
                 }}
+                _invalid={{
+                  borderColor: 'red',
+                }}
                 value={localObservable.usuario.password}
               />
               <FormControl.ErrorMessage>
@@ -99,11 +91,7 @@ const RegistrarUsuarioScreen = () => {
             <FormControl
               pb="10px"
               isRequired
-              isInvalid={
-                localObservable.usuario.password === '' &&
-                localObservable.submitted &&
-                !localObservable.success
-              }>
+              isInvalid={localObservable.emptyRepeatPasswordError}>
               <FormControl.Label
                 _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
                 Repetir contraseña
@@ -115,6 +103,9 @@ const RegistrarUsuarioScreen = () => {
                 _dark={{
                   color: '#000000',
                 }}
+                _invalid={{
+                  borderColor: 'red',
+                }}
                 value={localObservable.repeatPassword}
               />
               <FormControl.ErrorMessage>
@@ -124,11 +115,7 @@ const RegistrarUsuarioScreen = () => {
             <FormControl
               pb="10px"
               isRequired
-              isInvalid={
-                localObservable.usuario.email === '' &&
-                localObservable.submitted &&
-                !localObservable.success
-              }>
+              isInvalid={localObservable.emailError}>
               <FormControl.Label
                 _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
                 Email
@@ -140,6 +127,9 @@ const RegistrarUsuarioScreen = () => {
                 _dark={{
                   color: '#000000',
                 }}
+                _invalid={{
+                  borderColor: 'red',
+                }}
                 value={localObservable.usuario.email}
               />
               <FormControl.ErrorMessage>
@@ -149,11 +139,7 @@ const RegistrarUsuarioScreen = () => {
             <FormControl
               pb="10px"
               isRequired
-              isInvalid={
-                localObservable.usuario.nombre === '' &&
-                localObservable.submitted &&
-                !localObservable.success
-              }>
+              isInvalid={localObservable.nombreError}>
               <FormControl.Label
                 _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
                 Nombre
@@ -165,6 +151,9 @@ const RegistrarUsuarioScreen = () => {
                 _dark={{
                   color: '#000000',
                 }}
+                _invalid={{
+                  borderColor: 'red',
+                }}
                 value={localObservable.usuario.nombre}
               />
               <FormControl.ErrorMessage>
@@ -174,11 +163,7 @@ const RegistrarUsuarioScreen = () => {
             <FormControl
               pb="10px"
               isRequired
-              isInvalid={
-                localObservable.usuario.apellido === '' &&
-                localObservable.submitted &&
-                !localObservable.success
-              }>
+              isInvalid={localObservable.apellidoError}>
               <FormControl.Label
                 _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
                 Apellido
@@ -190,6 +175,9 @@ const RegistrarUsuarioScreen = () => {
                 _dark={{
                   color: '#000000',
                 }}
+                _invalid={{
+                  borderColor: 'red',
+                }}
                 value={localObservable.usuario.apellido}
               />
               <FormControl.ErrorMessage>
@@ -199,11 +187,7 @@ const RegistrarUsuarioScreen = () => {
             <FormControl
               pb="10px"
               isRequired
-              isInvalid={
-                localObservable.usuario.id_rol === -1 &&
-                localObservable.submitted &&
-                !localObservable.success
-              }>
+              isInvalid={localObservable.rolError}>
               <FormControl.Label
                 _text={{
                   color: 'muted.800',
@@ -225,6 +209,9 @@ const RegistrarUsuarioScreen = () => {
                 mt={1}
                 _dark={{
                   color: '#000000',
+                }}
+                _invalid={{
+                  borderColor: 'red',
                 }}>
                 {RolStore.rolesList.data.map((value: RolDTO, index: number) => {
                   return (

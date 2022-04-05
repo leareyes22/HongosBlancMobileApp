@@ -79,10 +79,7 @@ const AsignacionTareasScreen = () => {
         <FormControl
           mb={1}
           isRequired
-          isInvalid={
-            localObservable.submitted &&
-            localObservable.tarea.descripcion === ''
-          }>
+          isInvalid={localObservable.descripcionError}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -101,12 +98,7 @@ const AsignacionTareasScreen = () => {
             value={localObservable.tarea.descripcion}
           />
         </FormControl>
-        <FormControl
-          mb={1}
-          isRequired
-          isInvalid={
-            localObservable.submitted && localObservable.tarea.id_sala === -1
-          }>
+        <FormControl mb={1} isRequired isInvalid={localObservable.idSalaError}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -146,10 +138,7 @@ const AsignacionTareasScreen = () => {
         <FormControl
           mb={1}
           isRequired
-          isInvalid={
-            localObservable.submitted &&
-            localObservable.tarea.id_personal_asignado === -1
-          }>
+          isInvalid={localObservable.idPersonalAsignadoError}>
           <FormControl.Label
             _text={{
               color: '#000000',

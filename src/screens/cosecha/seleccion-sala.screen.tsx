@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import {
   Box,
@@ -21,25 +21,18 @@ import CosechaStore from '../../stores/cosecha.store';
 import { emptyTurnoDTO } from '../../models/turno';
 
 const SeleccionSalaScreen = ({ navigation }: any) => {
-  const [sala, setSala] = useState('');
-  const [turno, setTurno] = useState('');
-
   useEffect(() => {
     SalaStore.getSalasListFromAPI();
     SalaStore.setSala(emptySalaDTO);
     TurnoStore.setTurno(emptyTurnoDTO);
-    setSala('');
-    setTurno('');
   }, []);
 
   function handleSalaSelect(itemValue: any) {
-    setSala(itemValue);
     SalaStore.getSalaFromAPI(itemValue);
     CosechaStore.setSala(itemValue);
   }
 
   function handleTurnoSelect(itemValue: any) {
-    setTurno(itemValue);
     TurnoStore.getTurnoFromAPI(itemValue);
     CosechaStore.setTurno(itemValue);
   }
@@ -68,7 +61,7 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
           </FormControl.Label>
           <Select
             borderColor="primary.900"
-            selectedValue={sala}
+            selectedValue={CosechaStore.cosecha.data.id_sala.toString()}
             minWidth={200}
             placeholder="Seleccione una sala"
             // eslint-disable-next-line react/jsx-no-bind
@@ -102,7 +95,7 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
           </FormControl.Label>
           <Select
             borderColor="primary.900"
-            selectedValue={turno}
+            selectedValue={CosechaStore.cosecha.data.id_turno.toString()}
             minWidth={200}
             placeholder="Seleccione un turno"
             onValueChange={handleTurnoSelect}
@@ -152,7 +145,10 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
               size={26}
             />
           }
-          disabled={sala === '' || turno === ''}
+          disabled={
+            CosechaStore.cosecha.data.id_sala === -1 ||
+            CosechaStore.cosecha.data.id_turno === -1
+          }
           flex={1}
           // eslint-disable-next-line react/jsx-no-bind
           onPress={() => {

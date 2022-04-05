@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import {
   Alert,
@@ -28,12 +28,9 @@ import ProductoDTO from '../../models/producto';
 const CargarDatosScreen = ({ navigation }: any) => {
   const localObservable = useLocalObservable(createLocalObservable);
 
-  const [producto, setProducto] = useState('');
-
   function handleProductoSelect(itemValue: any) {
-    setProducto(itemValue);
     ProductoStore.getProductoFromAPI(itemValue);
-    CosechaStore.setProducto(itemValue);
+    localObservable.setProducto(itemValue);
   }
 
   useEffect(() => {
@@ -45,11 +42,6 @@ const CargarDatosScreen = ({ navigation }: any) => {
     CosechaStore.cosecha.hasError,
   ]);
 
-  const loadDataButtonDisabled =
-    producto === '' ||
-    localObservable.cosecha.kg_cosechados === 0 ||
-    localObservable.cosecha.observaciones === '';
-
   return (
     <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">
       <VStack space={2} mt={5}>
@@ -59,7 +51,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
         <FormControl
           mb={1}
           isRequired
-          isInvalid={localObservable.cosecha.kg_cosechados === 0.0}>
+          isInvalid={localObservable.kgCosechadosError}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -69,6 +61,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
           </FormControl.Label>
           <NumericInput
             value={localObservable.cosecha.kg_cosechados}
+            initValue={localObservable.cosecha.kg_cosechados}
             totalWidth={240}
             totalHeight={50}
             onChange={localObservable.kgCosechadosHandler}
@@ -87,7 +80,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
         <FormControl
           mb={1}
           isRequired
-          isInvalid={CosechaStore.cosecha.data.id_producto === -1}>
+          isInvalid={localObservable.productoError}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -97,7 +90,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
           </FormControl.Label>
           <Select
             borderColor="primary.900"
-            selectedValue={producto}
+            selectedValue={localObservable.cosecha.id_producto.toString()}
             minWidth={200}
             placeholder="Seleccione un producto"
             // eslint-disable-next-line react/jsx-no-bind
@@ -109,6 +102,9 @@ const CargarDatosScreen = ({ navigation }: any) => {
             mt={1}
             _dark={{
               color: '#000000',
+            }}
+            _invalid={{
+              borderColor: 'red',
             }}>
             {ProductoStore.productosList.data.map(
               (value: ProductoDTO, index: number) => {
@@ -137,7 +133,7 @@ const CargarDatosScreen = ({ navigation }: any) => {
         <FormControl
           mb={1}
           isRequired
-          isInvalid={localObservable.cosecha.observaciones === ''}>
+          isInvalid={localObservable.observacionesError}>
           <FormControl.Label
             _text={{
               color: '#000000',
@@ -150,6 +146,9 @@ const CargarDatosScreen = ({ navigation }: any) => {
             borderColor="primary.900"
             _dark={{
               color: '#000000',
+            }}
+            _invalid={{
+              borderColor: 'red',
             }}
             onChangeText={localObservable.observacionesHandler}
             placeholder="Ingrese las observaciones..."
@@ -186,7 +185,6 @@ const CargarDatosScreen = ({ navigation }: any) => {
                 size={26}
               />
             }
-            disabled={loadDataButtonDisabled}
             onPress={localObservable.submitHandler}
             flex={2}>
             Cargar datos

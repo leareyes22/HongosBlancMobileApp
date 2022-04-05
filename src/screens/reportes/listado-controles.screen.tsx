@@ -59,7 +59,7 @@ const ListadoControlesScreen = () => {
 
   return (
     <SafeAreaView style={{ backgroundColor: '#d6d3d1', height: '100%' }}>
-      <VStack space={2} mt={5}>
+      <VStack space={2} mt={5} pb={'90px'}>
         <Heading pl={2} size="lg" color="primary.800">
           Listado de controles
         </Heading>
