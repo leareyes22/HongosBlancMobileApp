@@ -78,6 +78,12 @@ const StatusBar = () => {
       }
     } catch (error) {
       console.error(error);
+      PushNotification.localNotification({
+        channelId: 'hongosblanc-channel-id',
+        title: 'Notificación de error',
+        message:
+          'Ha ocurrido un error al intentar sicronizar los datos con el servidor.',
+      });
     }
   }, []);
 
@@ -90,33 +96,27 @@ const StatusBar = () => {
           state.isConnected &&
           state.isWifiEnabled
         ) {
-          Alert.alert(
-            'Usted posee conexión a internet',
-            'Se van a sincronizar los datos al servidor.',
-            [
-              {
-                text: 'Confirmar',
-                onPress: () => {
-                  syncDataCallBack();
-                  TareaStore.getTareasDiariasEmpleadoListFromAPI(
-                    new Date(),
-                    SessionStore.user_id,
-                  ).then(() => {
-                    if (TareaStore.tareasDiariasEmpleadoList.data.length > 0) {
-                      PushNotification.localNotification({
-                        channelId: 'hongosblanc-channel-id',
-                        title: 'Notificación de tareas',
-                        message:
-                          'Usted tiene asignadas ' +
-                          TareaStore.tareasDiariasEmpleadoList.data.length +
-                          ' tareas para este día. Acceda a la sección de Tareas para más detalles.',
-                      });
-                    }
-                  });
-                },
-              },
-            ],
-          );
+          PushNotification.localNotification({
+            channelId: 'hongosblanc-channel-id',
+            title: 'Notificación de sincronización',
+            message: 'Sincronizando datos con el servidor.',
+          });
+          syncDataCallBack();
+          TareaStore.getTareasDiariasEmpleadoListFromAPI(
+            new Date(),
+            SessionStore.user_id,
+          ).then(() => {
+            if (TareaStore.tareasDiariasEmpleadoList.data.length > 0) {
+              PushNotification.localNotification({
+                channelId: 'hongosblanc-channel-id',
+                title: 'Notificación de tareas',
+                message:
+                  'Usted tiene asignadas ' +
+                  TareaStore.tareasDiariasEmpleadoList.data.length +
+                  ' tareas para este día. Acceda a la sección de Tareas para más detalles.',
+              });
+            }
+          });
         }
         if (SessionStore.isLoggedIn && !state.isConnected) {
           Alert.alert(
