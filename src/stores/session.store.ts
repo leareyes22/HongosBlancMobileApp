@@ -10,9 +10,6 @@ class SessionStore {
   loginError: boolean = false;
   loginErrorCode: number = -1;
 
-  //variable offline para ver si está o no conectado y subir los datos al servidor.
-  isOnline = false;
-
   constructor() {
     makeAutoObservable(this);
     /*const admin = AsyncStorage.getItem('admin');
@@ -38,10 +35,6 @@ class SessionStore {
   setError(errorCode: number) {
     this.loginError = true;
     this.loginErrorCode = errorCode;
-  }
-
-  setIsOnline(isOnline: boolean) {
-    this.isOnline = isOnline;
   }
 
   getToken() {
