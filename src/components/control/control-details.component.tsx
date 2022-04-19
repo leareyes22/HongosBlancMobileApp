@@ -17,15 +17,10 @@ const ControlDetailsModal = (props: any) => {
     setShowModal(false);
   }
 
-  async function setData() {
-    let temperaturas = await ControlStore.getControlTemperaturas(
-      props.control.id,
-    );
-    setControlTemperaturas(temperaturas);
-  }
-
   useEffect(() => {
-    setData();
+    ControlStore.getControlTemperaturas(props.control.id).then(temperaturas => {
+      setControlTemperaturas(temperaturas);
+    });
   }, []);
 
   return (
@@ -72,19 +67,20 @@ const ControlDetailsModal = (props: any) => {
               </Text>
               <Text>{'CO2 (ppm): ' + props.control.co2}</Text>
               <Text>{'Observaciones: ' + props.control.observaciones}</Text>
-              {controlTemperaturas.length > 0 &&
-                controlTemperaturas.map((temp: any, index: number) => {
-                  return (
-                    <Box key={index} alignItems="flex-start">
-                      <Text>
-                        {'Temperatura promedio cama ' +
-                          temp.nro_cama +
-                          ': ' +
-                          temp.temp_prom}
-                      </Text>
-                    </Box>
-                  );
-                })}
+              {controlTemperaturas.length > 0
+                ? controlTemperaturas.map((temp: any, index: number) => {
+                    return (
+                      <Box key={index} alignItems="flex-start">
+                        <Text>
+                          {'Temperatura promedio cama ' +
+                            temp.nro_cama +
+                            ': ' +
+                            temp.temp_prom}
+                        </Text>
+                      </Box>
+                    );
+                  })
+                : null}
             </VStack>
           </Modal.Body>
         </Modal.Content>

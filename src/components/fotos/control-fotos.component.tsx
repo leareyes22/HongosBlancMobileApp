@@ -25,12 +25,10 @@ const ControlFotosModal = (props: any) => {
     setShowModal(false);
   }
 
-  async function setData() {
-    setControlImages(await ControlStore.getControlImages(props.controlId));
-  }
-
   useEffect(() => {
-    setData();
+    ControlStore.getControlImages(props.controlId).then(images => {
+      setControlImages(images);
+    });
   }, []);
 
   return (
@@ -64,26 +62,27 @@ const ControlFotosModal = (props: any) => {
           <Modal.Header>Fotos</Modal.Header>
           <Modal.Body>
             <VStack space={4}>
-              {controlImages.length > 0 &&
-                controlImages.map((img: string, index: number) => {
-                  return (
-                    <Box key={index} alignItems="center">
-                      <Heading>{'Cama ' + (index + 1)}</Heading>
-                      <FastImage
-                        style={{
-                          width: 120,
-                          height: 120,
-                          borderRadius: 12,
-                        }}
-                        source={{
-                          uri: controlImages[index],
-                          priority: FastImage.priority.normal,
-                        }}
-                        resizeMode={FastImage.resizeMode.cover}
-                      />
-                    </Box>
-                  );
-                })}
+              {controlImages.length > 0
+                ? controlImages.map((img: string, index: number) => {
+                    return (
+                      <Box key={index} alignItems="center">
+                        <Heading>{'Cama ' + (index + 1)}</Heading>
+                        <FastImage
+                          style={{
+                            width: 120,
+                            height: 120,
+                            borderRadius: 12,
+                          }}
+                          source={{
+                            uri: controlImages[index],
+                            priority: FastImage.priority.normal,
+                          }}
+                          resizeMode={FastImage.resizeMode.cover}
+                        />
+                      </Box>
+                    );
+                  })
+                : null}
             </VStack>
           </Modal.Body>
         </Modal.Content>
