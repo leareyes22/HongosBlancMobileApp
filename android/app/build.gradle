@@ -132,7 +132,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.mobileapp'
+        applicationId 'com.hongosblancapp'
         minSdkVersion rootProject.ext.minSdkVersion
         missingDimensionStrategy 'react-native-camera', 'general'
         targetSdkVersion rootProject.ext.targetSdkVersion
