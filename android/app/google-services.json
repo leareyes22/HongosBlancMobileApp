@@ -1,15 +1,15 @@
 {
   "project_info": {
     "project_number": "951003041610",
-    "project_id": "hongosblancmobileapp",
-    "storage_bucket": "hongosblancmobileapp.appspot.com"
+    "project_id": "hongosblancapp",
+    "storage_bucket": "hongosblancapp.appspot.com"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:951003041610:android:5fa0294fe61f3ef3d07bb3",
         "android_client_info": {
-          "package_name": "com.mobileapp"
+          "package_name": "com.hongosblancapp"
         }
       },
       "oauth_client": [

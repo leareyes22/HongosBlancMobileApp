@@ -1,4 +1,4 @@
-package com.mobileapp;
+package com.hongosblancapp;
 
 import android.app.Application;
 import android.content.Context;
