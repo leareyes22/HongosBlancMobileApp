@@ -95,6 +95,7 @@ const StatusBar = () => {
 
   useEffect(() => {
     if (SessionStore.isLoggedIn && !_.isNull(isOnline)) {
+      SessionStore.setIsOnline(isOnline);
       if (isOnline) {
         syncDataCallBack();
         TareaStore.getTareasDiariasEmpleadoListFromAPI(

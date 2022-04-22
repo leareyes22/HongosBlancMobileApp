@@ -2,6 +2,7 @@ import { makeAutoObservable } from 'mobx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class SessionStore {
+  isOnline: boolean = false;
   username: string = '';
   user_id: number = -1;
   role: string = '';
@@ -30,6 +31,10 @@ class SessionStore {
       this.isLoggedIn = true;
     }
     this.loginError = false;
+  }
+
+  setIsOnline(isOnline: boolean) {
+    this.isOnline = isOnline;
   }
 
   setError(errorCode: number) {
