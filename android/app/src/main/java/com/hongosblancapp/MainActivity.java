@@ -1,4 +1,4 @@
-package com.mobileapp;
+package com.hongosblancapp;
 
 import com.facebook.react.ReactActivity;
 

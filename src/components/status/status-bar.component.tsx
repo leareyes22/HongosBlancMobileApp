@@ -95,8 +95,8 @@ const StatusBar = () => {
 
   useEffect(() => {
     if (SessionStore.isLoggedIn && !_.isNull(isOnline)) {
-      SessionStore.setIsOnline(isOnline);
       if (isOnline) {
+        SessionStore.setIsOnline(true);
         syncDataCallBack();
         TareaStore.getTareasDiariasEmpleadoListFromAPI(
           new Date(),
@@ -114,6 +114,7 @@ const StatusBar = () => {
           }
         });
       } else {
+        SessionStore.setIsOnline(false);
         PushNotification.localNotification({
           channelId: 'hongosblanc-channel-id',
           title: 'Notificación de conexión',

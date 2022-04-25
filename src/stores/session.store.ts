@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class SessionStore {
-  isOnline: boolean = false;
+  isOnline: boolean = true;
   username: string = '';
   user_id: number = -1;
   role: string = '';
