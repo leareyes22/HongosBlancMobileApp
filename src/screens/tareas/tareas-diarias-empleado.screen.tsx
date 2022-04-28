@@ -72,9 +72,7 @@ const TareasDiariasEmpleadoScreen = () => {
           <HStack alignItems="center" space={3}>
             <VStack>
               <Text color="#000000" _dark={{ color: '#000000' }} bold>
-                {moment(item.fecha_planificada)
-                  .locale('es')
-                  .format('DD/MM/YYYY')}
+                {moment(item?.fecha_planificada).format('DD/MM/YYYY')}
               </Text>
               <Text color="#000000" _dark={{ color: '#000000' }}>
                 {item.sala}
