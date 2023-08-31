@@ -6,15 +6,15 @@ import {
   HStack,
   Icon,
   Pressable,
-  ScrollView,
   Spacer,
+  Spinner,
   Text,
   VStack,
 } from 'native-base';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import UsuarioStore from '../../stores/usuario.store';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { Alert } from 'react-native';
+import { Alert, SafeAreaView } from 'react-native';
 import SessionStore from '../../stores/session.store';
 import EditUserModalComponent from '../../components/users/edit-user-modal.component';
 
@@ -58,7 +58,7 @@ const ConsultarUsuariosScreen = () => {
           <HStack alignItems="center" space={3}>
             <VStack>
               <Text color="#000000" _dark={{ color: '#000000' }} bold>
-                {item.username}
+                {item.nombre + ' ' + item.apellido}
               </Text>
               <Text color="#000000" _dark={{ color: '#000000' }}>
                 {item.rol}
@@ -80,7 +80,7 @@ const ConsultarUsuariosScreen = () => {
 
   const renderHiddenItem = (data: any, rowMap: any) => (
     <HStack flex={1} pl="3">
-      <EditUserModalComponent user={data.item}/>
+      <EditUserModalComponent user={data.item} />
       <Pressable
         w="70px"
         bg="red.500"
@@ -105,26 +105,35 @@ const ConsultarUsuariosScreen = () => {
   );
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#d6d3d1' }}>
+    <SafeAreaView style={{ backgroundColor: '#d6d3d1', height: '100%' }}>
       <VStack space={2} mt={5}>
         <Heading pl={2} size="lg" color="primary.800">
-          Consultar Usuarios
+          Consultar usuarios
         </Heading>
-        <SwipeListView
-          data={UsuarioStore.usuariosList.data}
-          // eslint-disable-next-line react/jsx-no-bind
-          renderItem={renderItem}
-          // eslint-disable-next-line react/jsx-no-bind
-          renderHiddenItem={renderHiddenItem}
-          rightOpenValue={-130}
-          previewRowKey={'1'}
-          previewOpenValue={-40}
-          previewOpenDelay={3000}
-          // eslint-disable-next-line react/jsx-no-bind
-          keyExtractor={item => String(item.id)}
-        />
+        {UsuarioStore.usuariosList.loading && (
+          <HStack space={2} mt={5} alignItems="center" ml="5">
+            <Heading color="primary.600">Cargando usuarios...</Heading>
+            <Spinner color="primary.600" />
+          </HStack>
+        )}
+        {!UsuarioStore.usuariosList.loading &&
+          UsuarioStore.usuariosList.hasData && (
+            <SwipeListView
+              data={UsuarioStore.usuariosList.data}
+              // eslint-disable-next-line react/jsx-no-bind
+              renderItem={renderItem}
+              // eslint-disable-next-line react/jsx-no-bind
+              renderHiddenItem={renderHiddenItem}
+              rightOpenValue={-130}
+              previewRowKey={'1'}
+              previewOpenValue={-40}
+              previewOpenDelay={3000}
+              // eslint-disable-next-line react/jsx-no-bind
+              keyExtractor={item => String(item.id)}
+            />
+          )}
       </VStack>
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 

@@ -7,7 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const CameraModal = (props: any) => {
   const takePicture = async function (camera: any) {
-    const options = { quality: 0.5, base64: true };
+    const options = { quality: 0.1, base64: true };
     const data = await camera.takePictureAsync(options);
     props.setFoto(data);
     props.setShowCam(false);
@@ -16,7 +16,13 @@ const CameraModal = (props: any) => {
   return (
     <Container style={styles.container}>
       <Modal isOpen={props.showCam}>
-        <RNCamera style={styles.preview} type={RNCamera.Constants.Type.back}>
+        <RNCamera
+          style={styles.preview}
+          type={
+            props.side === 'front'
+              ? RNCamera.Constants.Type.front
+              : RNCamera.Constants.Type.back
+          }>
           {({ camera, status }) => {
             if (status !== 'READY') return <PendingView />;
             return (
@@ -38,7 +44,7 @@ const CameraModal = (props: any) => {
                       size={26}
                     />
                   }>
-                  Tomar foto
+                  {props.header}
                 </Button>
               </View>
             );

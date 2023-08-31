@@ -2,37 +2,21 @@ import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CosechaNavigationStack from '../screens/cosecha/cosecha-navigation-stack';
-import ReportesScreen from '../screens/reportes/reportes.screen';
-import TareasScreen from '../screens/tareas/tareas.screen';
+import TareasStack from '../screens/tareas/tareas-navigation-stack';
 import ControlNavigationStack from '../screens/control/control-navigation-stack';
 
-const Tab = createMaterialBottomTabNavigator();
+const TabEmpleado = createMaterialBottomTabNavigator();
 
-function TabBar() {
+function TabEmpleadoBar() {
   return (
-    <Tab.Navigator
-      initialRouteName="Reportes"
+    <TabEmpleado.Navigator
+      initialRouteName="Tareas"
       activeColor="#f0edf6"
       inactiveColor="#3e2465"
       barStyle={{ backgroundColor: '#b45309' }}>
-      <Tab.Screen
-        name="Reportes"
-        component={ReportesScreen}
-        options={{
-          tabBarLabel: 'Reportes',
-          // eslint-disable-next-line react/display-name
-          tabBarIcon: () => (
-            <MaterialCommunityIcons
-              name="chart-histogram"
-              color={'#FFFFFF'}
-              size={26}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
+      <TabEmpleado.Screen
         name="Tareas"
-        component={TareasScreen}
+        component={TareasStack}
         options={{
           tabBarLabel: 'Tareas',
           // eslint-disable-next-line react/display-name
@@ -45,7 +29,7 @@ function TabBar() {
           ),
         }}
       />
-      <Tab.Screen
+      <TabEmpleado.Screen
         name="Control"
         component={ControlNavigationStack}
         options={{
@@ -60,7 +44,7 @@ function TabBar() {
           ),
         }}
       />
-      <Tab.Screen
+      <TabEmpleado.Screen
         name="Cosecha"
         component={CosechaNavigationStack}
         options={{
@@ -75,8 +59,8 @@ function TabBar() {
           ),
         }}
       />
-    </Tab.Navigator>
+    </TabEmpleado.Navigator>
   );
 }
 
-export default TabBar;
+export default TabEmpleadoBar;

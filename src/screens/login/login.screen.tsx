@@ -38,6 +38,9 @@ const LoginScreen = () => {
             _dark={{
               color: '#000000',
             }}
+            _invalid={{
+              borderColor: 'red',
+            }}
           />
           <FormControl.ErrorMessage>
             Debe ingresar un nombre de usuario.
@@ -54,6 +57,9 @@ const LoginScreen = () => {
             borderColor="primary.900"
             _dark={{
               color: '#000000',
+            }}
+            _invalid={{
+              borderColor: 'red',
             }}
           />
           <FormControl.ErrorMessage>

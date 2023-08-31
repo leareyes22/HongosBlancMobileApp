@@ -98,6 +98,45 @@ const EditUserModal = (props: any) => {
             </FormControl>
             <FormControl
               mt="3"
+              isInvalid={localObservable.passwordRequiredError}>
+              <FormControl.Label>Email</FormControl.Label>
+              <Input
+                type="text"
+                value={localObservable.usuario.email}
+                onChangeText={localObservable.setEmail}
+              />
+              <FormControl.ErrorMessage>
+                Debe ingresar un email.
+              </FormControl.ErrorMessage>
+            </FormControl>
+            <FormControl
+              mt="3"
+              isInvalid={localObservable.passwordRequiredError}>
+              <FormControl.Label>Nombre</FormControl.Label>
+              <Input
+                type="text"
+                value={localObservable.usuario.nombre}
+                onChangeText={localObservable.setNombre}
+              />
+              <FormControl.ErrorMessage>
+                Debe ingresar un nombre.
+              </FormControl.ErrorMessage>
+            </FormControl>
+            <FormControl
+              mt="3"
+              isInvalid={localObservable.passwordRequiredError}>
+              <FormControl.Label>Apellido</FormControl.Label>
+              <Input
+                type="text"
+                value={localObservable.usuario.apellido}
+                onChangeText={localObservable.setApellido}
+              />
+              <FormControl.ErrorMessage>
+                Debe ingresar un apellido.
+              </FormControl.ErrorMessage>
+            </FormControl>
+            <FormControl
+              mt="3"
               isInvalid={localObservable.usuario.id_rol === -1}>
               <FormControl.Label>Rol</FormControl.Label>
               <Select

@@ -2,10 +2,11 @@ import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 // eslint-disable-next-line no-unused-vars
 import { action, makeAutoObservable } from 'mobx';
 // eslint-disable-next-line no-unused-vars
-import { TurnoDTO, emptyTurnoDTO } from '../models/turno';
+import { TurnoDTO, emptyTurnoDTO, turnosOffline } from '../models/turno';
 // eslint-disable-next-line no-unused-vars
 import { initialUIWrapper, UIWrapper } from '../models/ui-wrapper';
 import API from '../util/api';
+import SessionStore from './session.store';
 
 class TurnoStore {
   turno: UIWrapper<TurnoDTO> = initialUIWrapper(emptyTurnoDTO);
@@ -17,17 +18,27 @@ class TurnoStore {
 
   async getTurnosListFromAPI() {
     this.setTurnosListWrapper(this.setLoading(this.turnosList));
-    try {
-      const r = await API.get(`/turno/list`);
-      if (r.status === StatusCodes.OK) {
-        this.setTurnosList(r.data);
-      } else {
-        this.setTurnosListWrapper(this.setError(this.turnosList, r.status));
+    if (SessionStore.isOnline) {
+      try {
+        const r = await API.get(`/turno/list`);
+        if (r.status === StatusCodes.OK) {
+          this.setTurnosList(r.data);
+        } else {
+          this.setTurnosListWrapper(this.setError(this.turnosList, r.status));
+        }
+      } catch (e) {
+        this.setTurnosListWrapper(
+          this.setError(this.turnosList, e.response.status),
+        );
       }
-    } catch (e) {
-      this.setTurnosListWrapper(
-        this.setError(this.turnosList, e.response.status),
-      );
+    } else {
+      try {
+        this.setTurnosList(turnosOffline);
+      } catch (e) {
+        this.setTurnosListWrapper(
+          this.setError(this.turnosList, e.response.status),
+        );
+      }
     }
   }
 

@@ -38,23 +38,13 @@ const RegistrarUsuarioScreen = () => {
       <Box flex={1} p={2} w="100%" mx="auto" bg="primary.100">
         <VStack space={4} mt={5}>
           <Heading size="lg" color="primary.800">
-            Registrar Usuario
+            Registrar usuario
           </Heading>
-          <FormControl
-            isInvalid={
-              localObservable.repeatPassword !==
-                localObservable.usuario.password &&
-              localObservable.submitted &&
-              !localObservable.success
-            }>
+          <FormControl isInvalid={localObservable.matchError}>
             <FormControl
               pb="10px"
               isRequired
-              isInvalid={
-                localObservable.usuario.username === '' &&
-                localObservable.submitted &&
-                !localObservable.success
-              }>
+              isInvalid={localObservable.usernameError}>
               <FormControl.Label
                 _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
                 Nombre de usuario
@@ -65,6 +55,9 @@ const RegistrarUsuarioScreen = () => {
                 _dark={{
                   color: '#000000',
                 }}
+                _invalid={{
+                  borderColor: 'red',
+                }}
                 value={localObservable.usuario.username}
               />
               <FormControl.ErrorMessage>
@@ -74,11 +67,7 @@ const RegistrarUsuarioScreen = () => {
             <FormControl
               pb="10px"
               isRequired
-              isInvalid={
-                localObservable.usuario.password === '' &&
-                localObservable.submitted &&
-                !localObservable.success
-              }>
+              isInvalid={localObservable.emptyPasswordError}>
               <FormControl.Label
                 _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
                 Contraseña
@@ -90,6 +79,9 @@ const RegistrarUsuarioScreen = () => {
                 _dark={{
                   color: '#000000',
                 }}
+                _invalid={{
+                  borderColor: 'red',
+                }}
                 value={localObservable.usuario.password}
               />
               <FormControl.ErrorMessage>
@@ -99,11 +91,7 @@ const RegistrarUsuarioScreen = () => {
             <FormControl
               pb="10px"
               isRequired
-              isInvalid={
-                localObservable.usuario.password === '' &&
-                localObservable.submitted &&
-                !localObservable.success
-              }>
+              isInvalid={localObservable.emptyRepeatPasswordError}>
               <FormControl.Label
                 _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
                 Repetir contraseña
@@ -115,6 +103,9 @@ const RegistrarUsuarioScreen = () => {
                 _dark={{
                   color: '#000000',
                 }}
+                _invalid={{
+                  borderColor: 'red',
+                }}
                 value={localObservable.repeatPassword}
               />
               <FormControl.ErrorMessage>
@@ -124,11 +115,79 @@ const RegistrarUsuarioScreen = () => {
             <FormControl
               pb="10px"
               isRequired
-              isInvalid={
-                localObservable.usuario.id_rol === -1 &&
-                localObservable.submitted &&
-                !localObservable.success
-              }>
+              isInvalid={localObservable.emailError}>
+              <FormControl.Label
+                _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
+                Email
+              </FormControl.Label>
+              <Input
+                type="text"
+                onChangeText={localObservable.setEmail}
+                borderColor="primary.900"
+                _dark={{
+                  color: '#000000',
+                }}
+                _invalid={{
+                  borderColor: 'red',
+                }}
+                value={localObservable.usuario.email}
+              />
+              <FormControl.ErrorMessage>
+                Debe ingresar un email.
+              </FormControl.ErrorMessage>
+            </FormControl>
+            <FormControl
+              pb="10px"
+              isRequired
+              isInvalid={localObservable.nombreError}>
+              <FormControl.Label
+                _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
+                Nombre
+              </FormControl.Label>
+              <Input
+                type="text"
+                onChangeText={localObservable.setNombre}
+                borderColor="primary.900"
+                _dark={{
+                  color: '#000000',
+                }}
+                _invalid={{
+                  borderColor: 'red',
+                }}
+                value={localObservable.usuario.nombre}
+              />
+              <FormControl.ErrorMessage>
+                Debe ingresar un nombre.
+              </FormControl.ErrorMessage>
+            </FormControl>
+            <FormControl
+              pb="10px"
+              isRequired
+              isInvalid={localObservable.apellidoError}>
+              <FormControl.Label
+                _text={{ color: 'muted.800', fontSize: 'sm', fontWeight: 600 }}>
+                Apellido
+              </FormControl.Label>
+              <Input
+                type="text"
+                onChangeText={localObservable.setApellido}
+                borderColor="primary.900"
+                _dark={{
+                  color: '#000000',
+                }}
+                _invalid={{
+                  borderColor: 'red',
+                }}
+                value={localObservable.usuario.apellido}
+              />
+              <FormControl.ErrorMessage>
+                Debe ingresar un apellido.
+              </FormControl.ErrorMessage>
+            </FormControl>
+            <FormControl
+              pb="10px"
+              isRequired
+              isInvalid={localObservable.rolError}>
               <FormControl.Label
                 _text={{
                   color: 'muted.800',
@@ -150,6 +209,9 @@ const RegistrarUsuarioScreen = () => {
                 mt={1}
                 _dark={{
                   color: '#000000',
+                }}
+                _invalid={{
+                  borderColor: 'red',
                 }}>
                 {RolStore.rolesList.data.map((value: RolDTO, index: number) => {
                   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import {
   Box,
@@ -16,25 +16,23 @@ import SessionStore from '../../stores/session.store';
 import SalaStore from '../../stores/sala.store';
 import TurnoStore from '../../stores/turno.store';
 // eslint-disable-next-line no-unused-vars
-import { SalaDTO } from '../../models/sala';
+import { emptySalaDTO, SalaDTO } from '../../models/sala';
 import CosechaStore from '../../stores/cosecha.store';
+import { emptyTurnoDTO } from '../../models/turno';
 
 const SeleccionSalaScreen = ({ navigation }: any) => {
-  const [sala, setSala] = useState('');
-  const [turno, setTurno] = useState('');
-
   useEffect(() => {
     SalaStore.getSalasListFromAPI();
+    SalaStore.setSala(emptySalaDTO);
+    TurnoStore.setTurno(emptyTurnoDTO);
   }, []);
 
   function handleSalaSelect(itemValue: any) {
-    setSala(itemValue);
     SalaStore.getSalaFromAPI(itemValue);
     CosechaStore.setSala(itemValue);
   }
 
   function handleTurnoSelect(itemValue: any) {
-    setTurno(itemValue);
     TurnoStore.getTurnoFromAPI(itemValue);
     CosechaStore.setTurno(itemValue);
   }
@@ -63,7 +61,7 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
           </FormControl.Label>
           <Select
             borderColor="primary.900"
-            selectedValue={sala}
+            selectedValue={CosechaStore.cosecha.data.id_sala.toString()}
             minWidth={200}
             placeholder="Seleccione una sala"
             // eslint-disable-next-line react/jsx-no-bind
@@ -87,14 +85,6 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
             })}
           </Select>
         </FormControl>
-        <FormControl mb={5}>
-          <Text
-            _dark={{
-              color: '#000000',
-            }}>
-            {'Estado de sala: ' + SalaStore.sala.data.estado}
-          </Text>
-        </FormControl>
         <FormControl mb={1}>
           <FormControl.Label
             _text={{
@@ -105,7 +95,7 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
           </FormControl.Label>
           <Select
             borderColor="primary.900"
-            selectedValue={turno}
+            selectedValue={CosechaStore.cosecha.data.id_turno.toString()}
             minWidth={200}
             placeholder="Seleccione un turno"
             onValueChange={handleTurnoSelect}
@@ -155,7 +145,10 @@ const SeleccionSalaScreen = ({ navigation }: any) => {
               size={26}
             />
           }
-          disabled={sala === '' || turno === ''}
+          disabled={
+            CosechaStore.cosecha.data.id_sala === -1 ||
+            CosechaStore.cosecha.data.id_turno === -1
+          }
           flex={1}
           // eslint-disable-next-line react/jsx-no-bind
           onPress={() => {

@@ -1,10 +1,11 @@
 import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { makeAutoObservable } from 'mobx';
 // eslint-disable-next-line no-unused-vars
-import RolDTO from '../models/rol';
+import RolDTO, { rolesOffline } from '../models/rol';
 // eslint-disable-next-line no-unused-vars
 import { initialUIWrapper, UIWrapper } from '../models/ui-wrapper';
 import API from '../util/api';
+import SessionStore from './session.store';
 
 class RolStore {
   rol: UIWrapper<RolDTO> = initialUIWrapper({
@@ -34,17 +35,27 @@ class RolStore {
 
   async getRolesListFromAPI() {
     this.setRolesListWrapper(this.setLoading(this.rolesList));
-    try {
-      const r = await API.get('/rol/list');
-      if (r.status === StatusCodes.OK) {
-        this.setRolesList(r.data);
-      } else {
-        this.setRolesListWrapper(this.setError(this.rolesList, r.status));
+    if (SessionStore.isOnline) {
+      try {
+        const r = await API.get('/rol/list');
+        if (r.status === StatusCodes.OK) {
+          this.setRolesList(r.data);
+        } else {
+          this.setRolesListWrapper(this.setError(this.rolesList, r.status));
+        }
+      } catch (e) {
+        this.setRolesListWrapper(
+          this.setError(this.rolesList, e.response.status),
+        );
       }
-    } catch (e) {
-      this.setRolesListWrapper(
-        this.setError(this.rolesList, e.response.status),
-      );
+    } else {
+      try {
+        this.setRolesList(rolesOffline);
+      } catch (e) {
+        this.setRolesListWrapper(
+          this.setError(this.rolesList, e.response.status),
+        );
+      }
     }
   }
 

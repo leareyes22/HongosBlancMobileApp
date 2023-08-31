@@ -46,12 +46,6 @@ const TemperaturasScreen = ({ navigation }: any) => {
           }}>
           {'Sala: ' + SalaStore.sala.data.nombre}
         </Text>
-        <Text
-          _dark={{
-            color: '#000000',
-          }}>
-          {'Estado: ' + SalaStore.sala.data.estado}
-        </Text>
       </VStack>
       <VStack space={2} mt={5}>
         <Heading size="lg" color="primary.800">
@@ -167,6 +161,8 @@ const TemperaturasScreen = ({ navigation }: any) => {
           showCam={localObservable.showCam}
           setShowCam={localObservable.setShowCam}
           setFoto={localObservable.setFoto}
+          header={'Tomar foto'}
+          side={'back'}
         />
         {ControlStore.controlImage !== '' && (
           <VStack space={2} alignItems="center" safeAreaTop my={6}>
@@ -215,6 +211,7 @@ const TemperaturasScreen = ({ navigation }: any) => {
                 localObservable.pushTemp(localObservable.tempActual);
                 localObservable.saveTemperaturas();
                 navigation.navigate('CargarDatos');
+                localObservable.setNroCamaActual(1);
               } else {
                 localObservable.increaseNroCamaActual();
               }
